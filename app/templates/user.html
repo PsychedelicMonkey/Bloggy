@@ -2,4 +2,17 @@
 
 {% block content %}
 <h1>{{ user.display_name }}</h1>
+
+{% if user == current_user %}
+<form action="{{ url_for('upload.upload_file') }}" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    {{ form.file.label }}<br>
+    {{ form.file }}<br>
+    {% for error in form.file.errors %}
+    <span class="color:red;">{{ error }}</span>
+    {% endfor %}
+    <p>{{ form.submit() }}</p>
+</form>
+{% endif %}
 {% endblock %}

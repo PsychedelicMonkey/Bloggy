@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from app import app, db
 from app.forms import PostForm
 from app.models import User, Post
+from app.uploads.forms import UploadFileForm
 
 @app.route('/')
 def index():
@@ -16,6 +17,9 @@ def index():
 @app.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
+    if user == current_user:
+        form = UploadFileForm()
+        return render_template('user.html', user=user, form=form)
     return render_template('user.html', user=user)
 
 

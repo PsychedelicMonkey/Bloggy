@@ -14,4 +14,7 @@ login.login_view = 'auth.login'
 from app.auth import auth
 app.register_blueprint(auth, url_prefix='/auth')
 
+from app.uploads import upload
+app.register_blueprint(upload)
+
 from app import routes, models, forms
