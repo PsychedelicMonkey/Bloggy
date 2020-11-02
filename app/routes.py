@@ -17,10 +17,11 @@ def index():
 @app.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
+    posts = user.posts.order_by(Post.created_at.desc())
     if user == current_user:
         form = UploadFileForm()
-        return render_template('user.html', user=user, form=form)
-    return render_template('user.html', user=user)
+        return render_template('user.html', user=user, form=form, posts=posts)
+    return render_template('user.html', user=user, posts=posts)
 
 
 @app.route('/upload_post', methods=['POST'])

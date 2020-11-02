@@ -28,7 +28,7 @@
 
 <ul>
 {% for post in posts %}
-<li><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.display_name }}</a> says: {{ post.body }}</li>
+    {% include "_post.html" %}
 {% endfor %}
 </ul>
 {% endblock %}
