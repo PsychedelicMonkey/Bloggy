@@ -16,6 +16,20 @@
 </form>
 {% endif %}
 
+{% if not current_user.is_following(user) %}
+<form action="{{ url_for('follow', username=user.username) }}" method="post">
+    {{ form.hidden_tag() }}
+
+    {{ form.submit(value='Follow') }}
+</form>
+{% else %}
+<form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+    {{ form.hidden_tag() }}
+
+    {{ form.submit(value='Unfollow') }}
+</form>
+{% endif %}
+
 {% for post in posts %}
     {% include "_post.html" %}
 {% endfor %}
