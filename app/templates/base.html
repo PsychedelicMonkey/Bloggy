@@ -17,6 +17,16 @@
             <li><a href="{{ url_for('auth.register') }}">Register</a></li>
         </ul>
     </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+        {% for category, message in messages %}
+        <li>{{ category }} | {{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
     {% block content %}{% endblock %}
 </body>
 </html>
