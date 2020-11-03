@@ -8,4 +8,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     UPLOAD_FOLDER = os.environ.get('IMAGE_UPLOADS') or 'app/static/user_uploads'
+    BACKGROUND_IMAGES = os.environ.get('BACKGROUND_IMAGES') or 'app/static/images'
     ALLOWED_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png', 'gif']

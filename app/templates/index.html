@@ -1,28 +1,39 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>Index</h1>
+{% block breadcrumb %}
+<div class="container">
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+  </nav>
+</div>
+{% endblock %}
 
+{% block content %}
+<div class="wrapper">
+<div class="container">
+    
 {% if form %}
 <h2>Upload new post</h2>
 <form action="{{ url_for('upload_post') }}" method="post">
     {{ form.hidden_tag() }}
 
-    <p>
+    <div class="form-group">
         {{ form.title.label }}<br>
-        {{ form.title(size=32) }}<br>
+        {{ form.title(class='form-control') }}<br>
         {% for errors in form.title.errors %}
         <span style="color:red;">{{ error }}</span>
         {% endfor %}
-    </p>
-    <p>
+    </div>
+    <div class="form-group">
         {{ form.body.label }}<br>
-        {{ form.body(size=32) }}<br>
+        {{ form.body(class='form-control') }}<br>
         {% for errors in form.body.errors %}
         <span style="color:red;">{{ error }}</span>
         {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
+    </div>
+    <div class="form-group">{{ form.submit(class='btn btn-primary') }}</div>
 </form>
 {% endif %}
 
@@ -31,4 +42,6 @@
     {% include "_post.html" %}
 {% endfor %}
 </ul>
+</div>
+</div>
 {% endblock %}
