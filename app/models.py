@@ -21,6 +21,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(128), index=True, unique=True)
     password = db.Column(db.String(164), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    about_me = db.Column(db.String(280), nullable=True)
+    last_seen = db.Column(db.DateTime)
+
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     followed = db.relationship(

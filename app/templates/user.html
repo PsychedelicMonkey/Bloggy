@@ -13,26 +13,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "modal.html" %}
 
 <div class="container">
     <section class="user">
@@ -120,48 +101,14 @@
                         aria-labelledby="pills-about-tab">
                         <div class="pane-content">
                             <h3>About {{ user.first_name }}</h3>
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque dolorem, quasi cum velit
-                            explicabo magnam officia tempore enim fugit ex fugiat ut tempora dignissimos laboriosam
-                            neque
-                            architecto doloribus. Rerum, veritatis?
-                            Laudantium ad suscipit necessitatibus quis minima nulla. Inventore eos doloribus tempore
-                            veniam,
-                            odit sapiente aliquam ducimus explicabo recusandae non amet voluptate labore perferendis
-                            fugiat
-                            dignissimos. Molestiae harum blanditiis quod quidem?
-                            Dolorem vitae expedita quod iste quibusdam nulla neque debitis sequi, perferendis doloribus
-                            autem praesentium, consequatur dolorum! Voluptatibus ratione obcaecati, sapiente quasi
-                            labore
-                            veritatis, illum minus voluptatum sed eveniet harum doloremque!
-                            Optio earum eos nihil soluta aut cumque fugit voluptate minima aperiam. Accusantium
-                            praesentium
-                            quisquam aut suscipit aliquid et reprehenderit necessitatibus eaque repudiandae numquam
-                            minus
-                            repellat, natus voluptatem accusamus earum quas.
-                            Nostrum labore iste delectus dolorum eius? Dolorem expedita hic incidunt sed earum rerum
-                            aliquid
-                            suscipit maxime, assumenda, deserunt fuga sit repellat mollitia, natus totam molestiae odit
-                            fugiat esse recusandae explicabo?
-                            Dolore consequuntur quidem, qui, nisi culpa enim labore iusto, doloribus recusandae nam
-                            perspiciatis asperiores dolorum unde harum! Eaque necessitatibus quos pariatur ad dicta,
-                            fuga
-                            quasi! Dolore eos beatae cumque illo.
-                            Est fugiat, hic vitae id deserunt consequatur quisquam aliquid! Est pariatur maxime,
-                            cupiditate
-                            consequuntur earum dicta eveniet voluptatem quos, corrupti, vel itaque quaerat nisi
-                            quisquam?
-                            Enim, tenetur. Similique, sit voluptate!
-                            Exercitationem velit quam suscipit nostrum error sequi minus quos, iste libero iure adipisci
-                            similique commodi quia, fugit tempore asperiores molestias quibusdam et necessitatibus sunt
-                            rem.
-                            Nobis dolore dignissimos fuga laboriosam.
-                            Eius iste nesciunt suscipit, sequi distinctio autem iure unde odio laudantium molestias
-                            adipisci, necessitatibus odit minima corrupti id, ex sunt? Eos error architecto cum cumque
-                            dolore ipsum accusamus quod esse!
-                            Assumenda cupiditate magni earum. Animi, quas ut. Saepe itaque fugit tempore doloremque
-                            suscipit
-                            maxime velit debitis nobis et perspiciatis distinctio explicabo, illo necessitatibus. Vel
-                            incidunt praesentium provident ex in harum?
+                            <p><strong>Joined:</strong> {{ moment(user.created_at).format('LL') }}</p>
+                            <p><strong>Last Seen:</strong> {{ moment(user.last_seen).format('LLL') }}</p>
+                            {% if user.about_me %}
+                                <p>{{ user.about_me }}</p>
+                            {% else %}
+                                <p>This user has not added a biography</p>
+                            {% endif %}
+                            {% if user == current_user %}<button class="btn btn-secondary" data-toggle="modal" data-target="#formModal" data-formaction="{{ edit_about_me }}">Edit</button>{% endif %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-followers" role="tabpanel"
@@ -240,7 +187,9 @@
     <h2>{{ user.first_name }}'s posts</h2>
     <div class="row">
         {% for post in posts %}
-        {% include "_post.html" %}
+        <div class="col-md-12">
+            {% include "_post.html" %}
+        </div>
         {% endfor %}
     </div>
 </div>

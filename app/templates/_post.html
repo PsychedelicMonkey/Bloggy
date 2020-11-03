@@ -2,7 +2,7 @@
     <a href="{{ url_for('user', username=post.author.username) }}"><img src="{{ url_for('static', filename='images/login.jpg') }}" class="align-self-start mr-3 media-image" alt="..."></a>
     <div class="media-body">
         <h5 class="mt-0">{{ post.title }}</h5>
-        <p><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.display_name }}</a> at {{ post.created_at }}</p>
+        <p><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.display_name }}</a> at {{ moment(post.created_at).fromNow() }}</p>
         <p>{{ post.body }}</p>
         <div class="media-actions">
             {% if post.author == current_user or current_user.is_anonymous %}
@@ -13,7 +13,7 @@
             <a href="#" class="btn btn-success {{ disabled }}">Like (0)</a>
             <a href="#" class="btn btn-primary {{ disabled }}">Share (0)</a>
             {% if post.author == current_user %}
-            <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Delete post</button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#formModal" data-formaction="delete-post">Delete post</button>
             {% endif %}
         </div>
     </div>

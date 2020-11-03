@@ -1,9 +1,17 @@
+from datetime import datetime
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
 from app import app, db
 from app.forms import PostForm, EmptyForm
 from app.models import User, Post
 from app.uploads.forms import UploadFileForm
+
+@app.before_request
+def update_last_seen():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+
 
 @app.route('/')
 def index():
@@ -82,3 +90,9 @@ def unfollow(username):
         flash(u'You are not following {}'.format(user.username), 'success')
         return redirect(url_for('user', username=username))
     return redirect(url_for('index'))
+
+
+@app.route('/edit_about_me', methods=['POST'])
+@login_required
+def edit_about_me():
+    pass

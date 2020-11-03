@@ -11,6 +11,10 @@
 {% endblock %}
 
 {% block content %}
+{% if current_user.is_authenticated %}
+    {% include "modal.html" %}
+{% endif %}
+
 <div class="wrapper">
 <div class="container">
     
@@ -37,11 +41,9 @@
 </form>
 {% endif %}
 
-<ul>
 {% for post in posts %}
     {% include "_post.html" %}
 {% endfor %}
-</ul>
 </div>
 </div>
 {% endblock %}
