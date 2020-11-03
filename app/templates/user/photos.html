@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('user.user', username=user.username) }}">{{ user.display_name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Photos</li>
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ user.display_name }}'s photos</h1>
+
+    {% if user == current_user %}
+        <!-- TODO: Change this form to just upload photos -->
+        <form action="{{ url_for('user.change_profile_image') }}" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.file.label }}<br>
+                {{ form.file() }}<br>
+                {% for error in form.file.errors %}
+                <span class="color:red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <p>{{ form.submit(class='btn btn-primary', value='Upload and Change Profile image') }}</p>
+        </form>
+
+        <!-- TODO: Remove this form -->
+        <form action="{{ url_for('user.change_profile_background') }}" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.file.label }}<br>
+                {{ form.file() }}<br>
+                {% for error in form.file.errors %}
+                <span class="color:red;">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <p>{{ form.submit(class='btn btn-primary', value='Upload and Change Profile background') }}</p>
+        </form>
+    {% endif %}
+
+    {% for photo in photos %}
+        {% set split = photo.split('app/')[1] %}
+        <!-- TODO: Change image style for a photo gallery -->
+        <img class="profile-image" src="{{ photo.split('app')[1] }}" alt="">
+    {% endfor %}
+</div>
+{% endblock %}

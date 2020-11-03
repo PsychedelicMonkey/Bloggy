@@ -1,12 +1,16 @@
 from flask import render_template, flash, request, redirect, url_for
 from flask_login import current_user, login_required
-from app import db
+from app import app, db
 from app.models import User, Post
 from app.forms import EmptyForm
 from app.uploads.forms import UploadFileForm
 from app.user import bp
 from app.user.forms import AboutMeForm
+from app.uploads.routes import allowed_file
 
+import os
+from glob import glob
+from werkzeug.utils import secure_filename
 
 @bp.route('/<username>')
 def user(username):
@@ -18,6 +22,15 @@ def user(username):
     else:
         form = EmptyForm()
     return render_template('user/user.html', user=user, posts=posts, form=form, like_form=like_form)
+
+
+@bp.route('/<username>/photos')
+def photos(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    photos = glob('{}/{}*'.format(app.config['UPLOAD_FOLDER'], username))
+    form = UploadFileForm()
+    change_photo_form = EmptyForm()
+    return render_template('user/photos.html', user=user, form=form, photos=photos, change_photo_form=change_photo_form)
 
 
 @bp.route('/follow/<username>', methods=['POST'])
@@ -71,3 +84,51 @@ def edit_profile():
     elif request.method == 'GET':
         form.text.data = user.about_me
     return render_template('user/forms/edit_profile.html', user=user, form=form)
+
+
+#TODO: Change this function to just change the profile image
+@bp.route('/change_profile_image', methods=['POST'])
+@login_required
+def change_profile_image():
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        if 'file' not in request.files:
+            flash(u'No file was found!', 'danger')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash(u'No selected file', 'danger')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename('{}-{}'.format(current_user.username, file.filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            current_user.avatar = filename
+            db.session.commit()
+            return redirect(request.referrer)
+    else:
+        flash(u'Error', 'danger')
+        return redirect(request.referrer)
+
+
+#TODO: Change this function to just change the background image
+@bp.route('/change_profile_background', methods=['POST'])
+@login_required
+def change_profile_background():
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        if 'file' not in request.files:
+            flash(u'No file was found!', 'danger')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash(u'No selected file', 'danger')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename('{}-{}'.format(current_user.username, file.filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            current_user.background_image = filename
+            db.session.commit()
+            return redirect(request.referrer)
+    else:
+        flash(u'Error', 'danger')
+        return redirect(request.referrer)

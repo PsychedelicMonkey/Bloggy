@@ -1,5 +1,5 @@
 from flask import render_template, flash, request, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app import app
 from app.uploads import upload
 from app.uploads.forms import UploadFileForm
@@ -24,9 +24,9 @@ def upload_file():
             flash(u'No selected file', 'danger')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = secure_filename('{}-{}'.format(current_user.username, file.filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('index'))
+            return redirect(request.referrer)
     else:
         flash(u'Error', 'danger')
         return redirect(request.referrer)

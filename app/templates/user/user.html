@@ -18,10 +18,9 @@
 <div class="container">
     <section class="user">
         <div class="row">
-            <img src="{{ url_for('static', filename='images/1.jpg') }}" alt=""
-                class="img-responsive profile-background">
+            <img src="/static/user_uploads/{{ user.background_image }}" alt="" class="img-responsive profile-background">
             <div class="user-profile">
-                <img src="{{ url_for('static', filename='images/2.jpg') }}" alt="" class="profile-image">
+                <img src="/static/user_uploads/{{ user.avatar }}" alt="" class="profile-image">
                 <div class="user-text-wrapper">
                     <h1>@{{ user.display_name }}</h1>
                     <h4>{{ user.first_name }} {{ user.last_name }}</h4>
@@ -82,9 +81,11 @@
                             <a class="nav-link" id="pills-photos-tab" data-toggle="pill" href="#pills-photos" role="tab"
                                 aria-controls="pills-photos" aria-selected="false">Photos</a>
                         </li>
+                        {% if not current_user == user %}
                         <li class="nav-item" role="presentation">
                             <button class="btn btn-light" href="#">Message</button>
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -147,9 +148,9 @@
                     </div>
                     <div class="tab-pane fade" id="pills-photos" role="tabpanel" aria-labelledby="pills-photos-tab">
                         <div class="pane-content">
-                            <h3>Photos</h3>
+                            <h3>Photos</h3> {% if user == current_user %}<p><a href="{{ url_for('user.photos', username=user.username) }}" class="btn btn-secondary">Change your profile images</a></p>{% endif %}
                             <div class="row">
-
+                                <p>Insert photos here</p>
                             </div>
                         </div>
                     </div>

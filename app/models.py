@@ -28,6 +28,9 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.String(280), nullable=True)
     last_seen = db.Column(db.DateTime)
 
+    avatar = db.Column(db.String(64), nullable=True)
+    background_image = db.Column(db.String(64), nullable=True)
+
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     followed = db.relationship(
