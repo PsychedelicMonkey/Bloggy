@@ -18,9 +18,17 @@
 <div class="container">
     <section class="user">
         <div class="row">
-            <img src="/static/user_uploads/{{ user.background_image }}" alt="" class="img-responsive profile-background">
+            {% if user.background_image %}
+            <img src="/static/user_uploads/{{ user.background_image }}" alt="Background-image" class="img-responsive profile-background">
+            {% else %}
+            <div class="profile-background-default"></div>
+            {% endif %}
             <div class="user-profile">
+                {% if user.avatar %}
                 <img src="/static/user_uploads/{{ user.avatar }}" alt="" class="profile-image">
+                {% else %}
+                <i class="fas fa-user user-icon profile"></i>
+                {% endif %}
                 <div class="user-text-wrapper">
                     <h1>@{{ user.display_name }}</h1>
                     <h4>{{ user.first_name }} {{ user.last_name }}</h4>
@@ -112,19 +120,12 @@
                             {% if user == current_user %}<a href="{{ url_for('user.edit_profile') }}" class="btn btn-secondary">Edit</a>{% endif %}
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-followers" role="tabpanel"
-                        aria-labelledby="pills-followers-tab">
+                    <div class="tab-pane fade" id="pills-followers" role="tabpanel" aria-labelledby="pills-followers-tab">
                         <div class="pane-content">
                             <h3>{{ user.first_name }}'s followers</h3>
                             <div class="row">
                                 {% for follower in user.followers %}
-                                <div class="user-image-link small">
-                                    <a href="{{ url_for('user.user', username=follower.username) }}">
-                                        <img class="media-image medium"
-                                            src="{{ url_for('static', filename='images/3.jpg') }}" alt="">
-                                        <h5>@{{ follower.display_name }}</h5>
-                                    </a>
-                                </div>
+                                    {% include "user/_followers.html" %}
                                 {% endfor %}
                             </div>
                         </div>
@@ -135,13 +136,7 @@
                             <h3>Who {{ user.first_name }} follows</h3>
                             <div class="row">
                                 {% for follower in user.followed %}
-                                <div class="user-image-link">
-                                    <a href="{{ url_for('user.user', username=follower.username) }}">
-                                        <img class="media-image medium"
-                                            src="{{ url_for('static', filename='images/3.jpg') }}" alt="">
-                                        <h5>@{{ follower.display_name }}</h5>
-                                    </a>
-                                </div>
+                                    {% include "user/_followers.html" %}
                                 {% endfor %}
                             </div>
                         </div>

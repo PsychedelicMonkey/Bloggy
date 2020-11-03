@@ -1,5 +1,11 @@
 <div class="media">
-    <a href="{{ url_for('user.user', username=post.author.username) }}"><img src="/static/user_uploads/{{ post.author.avatar }}" class="align-self-start mr-3 media-image" alt="..."></a>
+    <a class="media-link" href="{{ url_for('user.user', username=post.author.username) }}">
+        {% if post.author.avatar %}
+            <img src="/static/user_uploads/{{ post.author.avatar }}" class="align-self-start mr-3 media-image" alt="...">
+        {% else %}
+            <i class="fas fa-user user-icon thumbnail-post"></i>
+        {% endif %}
+    </a>
     <div class="media-body">
         <h5 class="mt-0">{{ post.title }}</h5>
         <p><a href="{{ url_for('user.user', username=post.author.username) }}">{{ post.author.display_name }}</a> posted {{ moment(post.created_at).fromNow() }}</p>

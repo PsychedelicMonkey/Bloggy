@@ -1,0 +1,10 @@
+<div class="user-image-link small">
+    <a href="{{ url_for('user.user', username=follower.username) }}">
+        {% if follower.avatar %}
+        <img class="media-image medium" src="/static/user_uploads/{{ follower.avatar }}" alt="">
+        {% else %}
+        <i class="fas fa-user user-icon thumbnail"></i>
+        {% endif %}
+        <h5>@{{ follower.display_name }}</h5>
+    </a>
+</div>

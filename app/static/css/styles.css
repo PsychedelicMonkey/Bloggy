@@ -25,6 +25,15 @@
     box-shadow: 4px 6px 8px #292929;
 }
 
+.profile-background-default {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    background-color: rgb(151, 151, 151);
+    box-shadow: 4px 6px 8px #292929;
+}
+
 .profile-image {
     width: 240px;
     height: 240px;
@@ -36,7 +45,7 @@
     padding: 22px 78px;
     align-items: center;
     color: white;
-    text-shadow: 5px 4px 5px #252525;
+    text-shadow: 2px 3px 2px #000000;
 }
 
 .user-text-wrapper {
@@ -64,6 +73,24 @@
 
 .media {
     padding: 24px 0;
+}
+
+.fa-user {
+    color: #292929;
+    text-decoration: none;
+}
+
+.user-icon.thumbnail {
+    font-size: 90px;
+}
+
+.user-icon.thumbnail-post {
+    font-size: 86px;
+    margin-right: 26px;
+}
+
+.user-icon.profile {
+    font-size: 240px;
 }
 
 @media (max-width: 370px) {
