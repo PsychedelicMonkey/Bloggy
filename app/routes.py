@@ -39,6 +39,13 @@ def upload_post():
         return redirect(url_for('index'))
 
 
+@app.route('/delete_post', methods=['POST'])
+@login_required
+def delete_post():
+    form = EmptyForm()
+    pass
+
+
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
 def follow(username):
