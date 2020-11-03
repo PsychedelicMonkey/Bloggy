@@ -29,13 +29,13 @@
 
                 {% if not current_user == user and current_user.is_authenticated %}
                 {% if not current_user.is_following(user) %}
-                <form action="{{ url_for('follow', username=user.username) }}" method="post">
+                <form action="{{ url_for('user.follow', username=user.username) }}" method="post">
                     {{ form.hidden_tag() }}
 
                     {{ form.submit(value='Follow', class='btn btn-info') }}
                 </form>
                 {% else %}
-                <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+                <form action="{{ url_for('user.unfollow', username=user.username) }}" method="post">
                     {{ form.hidden_tag() }}
 
                     {{ form.submit(value='Unfollow', class='btn btn-info') }}
@@ -118,7 +118,7 @@
                             <div class="row">
                                 {% for follower in user.followers %}
                                 <div class="user-image-link small">
-                                    <a href="{{ url_for('user', username=follower.username) }}">
+                                    <a href="{{ url_for('user.user', username=follower.username) }}">
                                         <img class="media-image medium"
                                             src="{{ url_for('static', filename='images/3.jpg') }}" alt="">
                                         <h5>@{{ follower.display_name }}</h5>
@@ -135,7 +135,7 @@
                             <div class="row">
                                 {% for follower in user.followed %}
                                 <div class="user-image-link">
-                                    <a href="{{ url_for('user', username=follower.username) }}">
+                                    <a href="{{ url_for('user.user', username=follower.username) }}">
                                         <img class="media-image medium"
                                             src="{{ url_for('static', filename='images/3.jpg') }}" alt="">
                                         <h5>@{{ follower.display_name }}</h5>
