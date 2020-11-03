@@ -17,7 +17,8 @@ def index():
     posts = Post.query.order_by(Post.created_at.desc()).all()
     if current_user.is_authenticated:
         form = PostForm()
-        return render_template('index.html', form=form, posts=posts)
+        like_form = EmptyForm()
+        return render_template('index.html', form=form, posts=posts, like_form=like_form)
     return render_template('index.html', posts=posts)
 
 
@@ -41,3 +42,42 @@ def upload_post():
 def delete_post():
     form = EmptyForm()
     pass
+
+@app.route('/like/<id>', methods=['POST'])
+@login_required
+def like(id):
+    post = Post.query.filter_by(id=id).first_or_404()
+    form = EmptyForm()
+    if form.validate_on_submit():
+        if post.author == current_user:
+            flash(u'You cannot like your own posts', 'danger')
+            return redirect(url_for('index'))
+        if post.is_liked(current_user):
+            flash(u'You already like this post', 'danger')
+            return redirect(url_for('index'))
+        post.likes.append(current_user)
+        db.session.commit()
+        flash(u'You liked {}\'s post'.format(post.author.display_name), 'success')
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/unlike/<id>', methods=['POST'])
+@login_required
+def unlike(id):
+    post = Post.query.filter_by(id=id).first_or_404()
+    form = EmptyForm()
+    if form.validate_on_submit():
+        if post.author == current_user:
+            flash(u'You cannot unlike your own posts', 'danger')
+            return redirect(url_for('index'))
+        if not post.is_liked(current_user):
+            flash(u'You already unlike this post', 'danger')
+            return redirect(url_for('index'))
+        post.likes.remove(current_user)
+        db.session.commit()
+        flash(u'You unliked {}\'s post'.format(post.author.display_name), 'success')
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('index'))

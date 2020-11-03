@@ -12,11 +12,12 @@ from app.user.forms import AboutMeForm
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.created_at.desc())
+    like_form = EmptyForm()
     if user == current_user:
         form = UploadFileForm()
     else:
         form = EmptyForm()
-    return render_template('user/user.html', user=user, posts=posts, form=form)
+    return render_template('user/user.html', user=user, posts=posts, form=form, like_form=like_form)
 
 
 @bp.route('/follow/<username>', methods=['POST'])

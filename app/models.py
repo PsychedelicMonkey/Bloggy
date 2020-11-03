@@ -3,12 +3,16 @@ from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 
+like = db.Table('like',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
+)
+
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('timestamp', db.DateTime, default=datetime.utcnow)
 )
-
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -72,5 +76,11 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    likes = db.relationship('User', secondary=like, lazy='dynamic',
+        backref=db.backref('likes', lazy='dynamic'))
+
     def __repr__(self):
         return '<Post {}>'.format(self.title)
+
+    def is_liked(self, user):
+        return self.likes.filter(like.c.user_id == user.id).count() > 0
