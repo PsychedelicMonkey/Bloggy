@@ -3,8 +3,7 @@ from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
 from app import app, db
 from app.forms import PostForm, EmptyForm
-from app.models import User, Post
-from app.uploads.forms import UploadFileForm
+from app.models import Post
 
 @app.before_request
 def update_last_seen():

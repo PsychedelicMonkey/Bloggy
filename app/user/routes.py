@@ -5,6 +5,7 @@ from app.models import User, Post
 from app.forms import EmptyForm
 from app.uploads.forms import UploadFileForm
 from app.user import bp
+from app.user.forms import AboutMeForm
 
 
 @bp.route('/<username>')
@@ -15,7 +16,7 @@ def user(username):
         form = UploadFileForm()
     else:
         form = EmptyForm()
-    return render_template('user.html', user=user, posts=posts, form=form)
+    return render_template('user/user.html', user=user, posts=posts, form=form)
 
 
 @bp.route('/follow/<username>', methods=['POST'])
@@ -56,8 +57,16 @@ def unfollow(username):
     return redirect(url_for('index'))
 
 
-#TODO: write the function to allow users to change the 'about me' section
-@bp.route('/edit_about_me', methods=['POST'])
+@bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
-def edit_about_me():
-    pass
+def edit_profile():
+    user = User.query.filter_by(username=current_user.username).first()
+    form = AboutMeForm()
+    if form.validate_on_submit():
+        user.about_me = form.text.data
+        db.session.commit()
+        flash(u'Your \'About Me\' section is updated', 'success')
+        return redirect(url_for('user.user', username=user.username))
+    elif request.method == 'GET':
+        form.text.data = user.about_me
+    return render_template('user/forms/edit_profile.html', user=user, form=form)
