@@ -1,31 +1,42 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/welcome.css') }}">
+<style>
+    body {
+        background-image: url({% if url %}{{ url }}{% else %}https://source.unsplash.com/random{% endif %});
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- TODO: Update login form to use Bootstrap styles -->
-<div class="background-image" style="background-image: url({{ url_for('static', filename='images/login.jpg') }});"></div>
 <div class="container">
     <div class="form-wrapper">
         <h1>Login</h1>
         <form action="{{ url_for('auth.login') }}" method="post">
             {{ form.hidden_tag() }}
-        
-            <p>
+            <div class="form-group">
                 {{ form.username.label }}<br>
-                {{ form.username(size=32) }}<br>
+                {{ form.username(class='form-control') }}<br>
                 {% for error in form.username.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
+                {{ form.password(class='form-control') }}<br>
                 {% for error in form.password.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>{{ form.remember_me }} {{ form.remember_me.label }}</p>
-            <p>{{ form.submit() }}</p>
+            </div>
+            <div class="form-group">
+                {{ form.remember_me }} {{ form.remember_me.label }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class='btn btn-primary') }}
+            </div>
         </form>
+        <p id="photo-attrib">Photo by: <a href="{{ auth_link }}">{{ author }}</a> on <a href="https://unsplash.com/">Unsplash</a></p>
     </div>
 </div>
 {% endblock %}

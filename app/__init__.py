@@ -22,4 +22,7 @@ app.register_blueprint(bp, url_prefix='/user')
 from app.uploads import upload
 app.register_blueprint(upload)
 
+from app.unsplash import unsplash
+app.register_blueprint(unsplash)
+
 from app import routes, models, forms

@@ -1,65 +1,100 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/welcome.css') }}">
+<style>
+    body {
+        background-image: url({% if url %}{{ url }}{% else %}https://source.unsplash.com/random{% endif %});
+    }
+
+    .form-group {
+        margin: 0;
+    }
+
+    .form-wrapper {
+        margin-top: 1%;
+    }
+
+    #photo-attrib {
+        margin-top: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .form-wrapper {
+            width: 50%;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .form-wrapper {
+            width: 92%;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- TODO: Update register form to use Bootstrap styles -->
-<div class="background-image" style="background-image: url({{ url_for('static', filename='images/register.jpg') }});"></div>
+<!-- TODO: Fix the full height issue with background images -->
 <div class="container">
     <div class="form-wrapper">
         <h1>Register</h1>
         <form action="{{ url_for('auth.register') }}" method="post">
             {{ form.hidden_tag() }}
 
-            <p>
+            <div class="form-group">
                 {{ form.username.label }}<br>
-                {{ form.username(size=32) }}<br>
+                {{ form.username(class='form-control') }}<br>
                 {% for error in form.username.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.first_name.label }}<br>
-                {{ form.first_name(size=32) }}<br>
+                {{ form.first_name(class='form-control') }}<br>
                 {% for error in form.first_name.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.middle_name.label }}<br>
-                {{ form.middle_name(size=32) }}<br>
+                {{ form.middle_name(class='form-control') }}<br>
                 {% for error in form.middle_name.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.last_name.label }}<br>
-                {{ form.last_name(size=32) }}<br>
+                {{ form.last_name(class='form-control') }}<br>
                 {% for error in form.last_name.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.email.label }}<br>
-                {{ form.email(size=32) }}<br>
+                {{ form.email(class='form-control') }}<br>
                 {% for error in form.email.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
+                {{ form.password(class='form-control') }}<br>
                 {% for error in form.password.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>
+            </div>
+            <div class="form-group">
                 {{ form.repeat_password.label }}<br>
-                {{ form.repeat_password(size=32) }}<br>
+                {{ form.repeat_password(class='form-control') }}<br>
                 {% for error in form.repeat_password.errors %}
                 <span style="color:red;">{{ error }}</span>
                 {% endfor %}
-            </p>
-            <p>{{ form.submit() }}</p>
+            </div>
+            <div class="form-group">
+                {{ form.submit(class='btn btn-primary') }}
+            </div>
         </form>
+        <p id="photo-attrib">Photo by: <a href="{{ auth_link }}">{{ author }}</a> on <a href="https://unsplash.com/">Unsplash</a></p>
     </div>
 </div>
 {% endblock %}

@@ -4,6 +4,9 @@ from app import db
 from app.auth import auth
 from app.auth.forms import LoginForm, RegisterForm
 from app.models import User
+
+from app.unsplash.routes import get_random
+
 from werkzeug.urls import url_parse
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -21,7 +24,15 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('auth/login.html', title="Login", form=form)
+
+    photo = get_random()
+    if photo:
+        url = photo['urls']['regular']
+        author = photo['user']['username']
+        auth_link = photo['user']['links']['html']
+        return render_template('auth/login.html', title="Login", form=form, url=url, author=author, auth_link=auth_link)
+    else:
+        return render_template('auth/login.html', title="Login", form=form)
 
 
 @auth.route('/logout')
@@ -51,4 +62,12 @@ def register():
         db.session.commit()
         flash(u'You have registered!', 'success')
         return redirect(url_for('auth.login'))
-    return render_template('auth/register.html', title="Register", form=form)
+
+    photo = get_random()
+    if photo:
+        url = photo['urls']['regular']
+        author = photo['user']['username']
+        auth_link = photo['user']['links']['html']
+        return render_template('auth/register.html', title="Register", form=form, url=url, author=author, auth_link=auth_link)
+    else:
+        return render_template('auth/register.html', title="Register", form=form)
