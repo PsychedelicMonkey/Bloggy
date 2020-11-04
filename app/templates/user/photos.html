@@ -6,7 +6,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Users</a></li>
-            <li class="breadcrumb-item"><a href="{{ url_for('user.user', username=user.username) }}">{{ user.display_name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('user.user', username=user.username) }}">{{ user.get_full_name() }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">Photos</li>
         </ol>
     </nav>

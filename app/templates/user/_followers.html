@@ -5,6 +5,6 @@
         {% else %}
         <i class="fas fa-user user-icon thumbnail"></i>
         {% endif %}
-        <h5>@{{ follower.display_name }}</h5>
+        <h5 class="follower-name">{{ follower.get_full_name() }}</h5>
     </a>
 </div>
