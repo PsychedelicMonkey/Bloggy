@@ -23,22 +23,24 @@
                 <a href="#" class="btn btn-success {{ disabled }}">Like ({{ post.likes.count() }})</a>
             {% else %}
                 {% if not post.is_liked(current_user) %}
-                <form style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
+                <!--form style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
                     {{ like_form.hidden_tag() }}
                     {{ like_form.submit(class='btn btn-success', value='Like ({})'.format(post.likes.count())) }}
-                </form>
+                </form-->
+                <button class="like-post btn btn-success" data-action="like" data-target="{{ url_for('like', id=post.id) }}">Like ({{ post.likes.count() }})</button>
                 {% else %}
-                <form style="display: inline-block;" action="{{ url_for('unlike', id=post.id) }}" method="post">
+                <!--form style="display: inline-block;" action="{{ url_for('unlike', id=post.id) }}" method="post">
                     {{ like_form.hidden_tag() }}
                     {{ like_form.submit(class='btn btn-danger', value='Unlike ({})'.format(post.likes.count())) }}
-                </form>
+                </form-->
+                <button class="like-post btn btn-danger" data-action="unlike" data-target="{{ url_for('unlike', id=post.id) }}">Unlike ({{ post.likes.count() }})</button>
                 {% endif %}
             {% endif %}
             <!-- END LIKES -->
 
             <a href="#" class="btn btn-primary {{ disabled }}">Share (0)</a>
             {% if post.author == current_user %}
-            <button class="btn btn-danger" data-toggle="modal" data-target="#formModal" data-formaction="delete-post">Delete post</button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-formaction="delete-post">Delete post</button>
             {% endif %}
         </div>
     </div>
