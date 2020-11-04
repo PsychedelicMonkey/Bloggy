@@ -19,13 +19,14 @@
     <section class="user">
         <div class="row">
             {% if user.background_image %}
-            <img src="/static/user_uploads/{{ user.background_image }}" alt="Background-image" class="img-responsive profile-background">
+            <img src="{{ url_for('upload.static', filename=user.background_image) }}" alt="Background-image" class="img-responsive profile-background">
             {% else %}
             <div class="profile-background-default"></div>
             {% endif %}
             <div class="user-profile">
                 {% if user.avatar %}
-                <img src="/static/user_uploads/{{ user.avatar }}" alt="" class="profile-image">
+                <img src="{{ url_for('upload.static', filename=user.avatar) }}" alt="" class="profile-image">
+                <!--img src="/static/user_uploads/{{ user.avatar }}" alt="" class="profile-image"-->
                 {% else %}
                 <i class="fas fa-user user-icon profile"></i>
                 {% endif %}

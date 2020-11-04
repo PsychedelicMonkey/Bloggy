@@ -1,7 +1,8 @@
 <div class="user-image-link small">
     <a href="{{ url_for('user.user', username=follower.username) }}">
         {% if follower.avatar %}
-        <img class="media-image medium" src="/static/user_uploads/{{ follower.avatar }}" alt="">
+        <img class="media-image medium" src="{{ url_for('upload.static', filename=follower.avatar) }}" alt="">
+        <!--img class="media-image medium" src="/static/user_uploads/{{ follower.avatar }}" alt=""-->
         {% else %}
         <i class="fas fa-user user-icon thumbnail"></i>
         {% endif %}
