@@ -14,12 +14,15 @@ def update_last_seen():
 
 @app.route('/')
 def index():
-    posts = Post.query.order_by(Post.created_at.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.created_at.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('index', page=posts.next_num) if posts.has_next else None
+    prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
     if current_user.is_authenticated:
         form = PostForm()
         like_form = EmptyForm()
-        return render_template('index.html', form=form, posts=posts, like_form=like_form)
-    return render_template('index.html', posts=posts)
+        return render_template('index.html', form=form, posts=posts.items, like_form=like_form, next_url=next_url, prev_url=prev_url)
+    return render_template('index.html', posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 
 @app.route('/upload_post', methods=['POST'])
