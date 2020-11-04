@@ -1,7 +1,6 @@
 body {
     height: 100vh;
     width: auto;
-    background-image: url(https://source.unsplash.com/random); /* TODO: change to use Unsplash API */
 
     background-size: cover;
     background-position: center;

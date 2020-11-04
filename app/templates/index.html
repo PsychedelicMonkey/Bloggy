@@ -4,7 +4,12 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
+            {% if title == 'Home' %}
             <li class="breadcrumb-item active" aria-current="page">Home</li>
+            {% else %}
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Latest</li>
+            {% endif %}
         </ol>
     </nav>
 </div>

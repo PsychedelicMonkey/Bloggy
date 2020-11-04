@@ -15,14 +15,30 @@ def update_last_seen():
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
+    if current_user.is_authenticated:
+        posts = current_user.followed_posts().order_by(Post.created_at.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
+    else:
+        posts = Post.query.order_by(Post.created_at.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('index', page=posts.next_num) if posts.has_next else None
+    prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
+    if current_user.is_authenticated:
+        form = PostForm()
+        like_form = EmptyForm()
+        return render_template('index.html', title="Home", form=form, posts=posts.items, like_form=like_form, next_url=next_url, prev_url=prev_url)
+    return render_template('index.html', title="Home", posts=posts.items, next_url=next_url, prev_url=prev_url)
+
+
+@app.route('/latest')
+def latest():
+    page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.created_at.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('index', page=posts.next_num) if posts.has_next else None
     prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
     if current_user.is_authenticated:
         form = PostForm()
         like_form = EmptyForm()
-        return render_template('index.html', form=form, posts=posts.items, like_form=like_form, next_url=next_url, prev_url=prev_url)
-    return render_template('index.html', posts=posts.items, next_url=next_url, prev_url=prev_url)
+        return render_template('index.html', title="Latest", form=form, posts=posts.items, like_form=like_form, next_url=next_url, prev_url=prev_url)
+    return render_template('index.html', title="Latest", posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 
 @app.route('/upload_post', methods=['POST'])
@@ -34,7 +50,7 @@ def upload_post():
         db.session.add(post)
         db.session.commit()
         flash(u'Your post is live!', 'success')
-        return redirect(url_for('index'))
+        return redirect(request.referrer)
     else:
         return redirect(url_for('index'))
 
@@ -61,7 +77,7 @@ def like(id):
         post.likes.append(current_user)
         db.session.commit()
         flash(u'You liked {}\'s post'.format(post.author.display_name), 'success')
-        return redirect(url_for('index'))
+        return redirect(request.referrer)
     else:
         return redirect(url_for('index'))
 
@@ -81,6 +97,6 @@ def unlike(id):
         post.likes.remove(current_user)
         db.session.commit()
         flash(u'You unliked {}\'s post'.format(post.author.display_name), 'success')
-        return redirect(url_for('index'))
+        return redirect(request.referrer)
     else:
         return redirect(url_for('index'))
