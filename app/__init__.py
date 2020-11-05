@@ -16,6 +16,9 @@ login.login_view = 'auth.login'
 from app.auth import auth
 app.register_blueprint(auth, url_prefix='/auth')
 
+from app.errors import error
+app.register_blueprint(error)
+
 from app.user import bp as bp
 app.register_blueprint(bp, url_prefix='/user')
 

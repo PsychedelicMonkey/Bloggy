@@ -15,15 +15,14 @@ function changeButton(button, action, id, count) {
     if (action == "like") {
         button.classList.remove('btn-success');
         button.classList.add('btn-danger');
-        button.innerHTML = 'Unlike (' + count + ')';
         button.dataset.action = 'unlike';
         button.dataset.target = '/unlike/' + id;
     }
     else if (action == "unlike") {
         button.classList.remove('btn-danger');
         button.classList.add('btn-success');
-        button.innerHTML = 'Like (' + count + ')';
         button.dataset.action = 'like';
         button.dataset.target = '/like/' + id;
     }
+    button.innerHTML = count + ' likes';
 }
