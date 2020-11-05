@@ -41,8 +41,8 @@
                             {{ current_user.get_full_name() }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url_for('user.user', username=current_user.username) }}">My
-                                Profile</a>
+                            <a class="dropdown-item" href="{{ url_for('user.user', username=current_user.username) }}">Messages</a>
+                            <a class="dropdown-item" href="{{ url_for('user.user', username=current_user.username) }}">My Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
                         </div>
