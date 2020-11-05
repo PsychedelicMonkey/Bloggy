@@ -110,7 +110,7 @@
                             {% else %}
                                 <p>This user has not added a biography</p>
                             {% endif %}
-                            {% if user == current_user %}<a href="{{ url_for('user.edit_profile') }}" class="btn btn-secondary">Edit</a>{% endif %}
+                            {% if user == current_user %}<button class="btn btn-secondary" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.edit_bio') }}">Edit</button>{% endif %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-followers" role="tabpanel" aria-labelledby="pills-followers-tab">
@@ -136,7 +136,8 @@
                     </div>
                     <div class="tab-pane fade" id="pills-photos" role="tabpanel" aria-labelledby="pills-photos-tab">
                         <div class="pane-content">
-                            <h3>Photos</h3> {% if user == current_user %}<p><a href="{{ url_for('user.photos', username=user.username) }}" class="btn btn-secondary">Change your profile images</a></p>{% endif %}
+                            <h3>Photos</h3>
+                            <p><a href="{{ url_for('user.photos', username=user.username) }}" class="btn btn-secondary">View all photos</a></p>
                             <div class="row">
                                 {% include "user/gallery.html" %}
                             </div>

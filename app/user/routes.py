@@ -19,7 +19,8 @@ def user(username):
     photos = glob('{}/{}*'.format(app.config['UPLOAD_FOLDER'], user.username))
     like_form = EmptyForm()
     if user == current_user:
-        form = UploadFileForm()
+        about_me = AboutMeForm()
+        return render_template('user/user.html', user=user, posts=posts, photos=photos, about_me=about_me, like_form=like_form)
     else:
         form = EmptyForm()
     return render_template('user/user.html', user=user, posts=posts, photos=photos, form=form, like_form=like_form)
@@ -133,3 +134,20 @@ def change_profile_background():
     else:
         flash(u'Error', 'danger')
         return redirect(request.referrer)
+
+
+@bp.route('/edit_bio', methods=['GET', 'POST'])
+@login_required
+def edit_bio():
+    user = User.query.filter_by(username=current_user.username).first()
+    form = AboutMeForm()
+    if form.validate_on_submit():
+        user.about_me = form.text.data
+        db.session.commit()
+        flash(u'You profile bio is updated.', 'success')
+        return redirect(url_for('user.user', username=user.username))
+    elif request.method == 'GET':
+        form.text.data = user.about_me
+        return render_template('modal/_edit_bio.html', form=form)
+    else:
+        return redirect(url_for('index'))

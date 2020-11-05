@@ -55,12 +55,21 @@ def upload_post():
         return redirect(url_for('index'))
 
 
-#TODO: Write the delete_post function
-@app.route('/delete_post', methods=['POST'])
+@app.route('/delete_post/<id>', methods=['GET', 'POST'])
 @login_required
-def delete_post():
+def delete_post(id):
+    post = Post.query.filter_by(id=id).first()
     form = EmptyForm()
-    pass
+    if form.validate_on_submit():
+        db.session.delete(post)
+        db.session.commit()
+        flash(u'Your post was deleted', 'success')
+        return redirect(request.referrer)
+    elif request.method == 'GET':
+        return render_template('modal/_delete_post.html', form=form, post=post)
+    else:
+        return redirect(url_for('index'))
+
 
 #TODO: Change to include CRSF
 @app.route('/like/<id>', methods=['POST'])

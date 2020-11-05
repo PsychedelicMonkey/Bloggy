@@ -1,0 +1,22 @@
+{% block modal %}
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">Edit Bio</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="{{ url_for('user.edit_bio') }}" method="post">
+    <div class="modal-body">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.text.label(class='col-form-label') }}
+            {{ form.text(class='form-control') }}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {{ form.submit(class='btn btn-primary') }}
+    </div>
+</form>
+{% endblock %}
