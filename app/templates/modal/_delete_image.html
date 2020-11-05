@@ -1,0 +1,26 @@
+{% block modal %}
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">Delete photo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="{{ url_for('user.delete_image', id=photo.id) }}" method="post">
+    {{ form.hidden_tag() }}
+    <div class="modal-body">
+        <p>Are you sure you delete this photo?</p>
+
+        {% if photo.name == current_user.avatar %}
+            <p><strong>You are currently using this as your profile picture</strong></p>
+        {% elif photo.name == current_user.background_image %}
+            <p><strong>You are currently using this as your background</strong></p>
+        {% endif %}
+
+        <img style="width: 100%; height: auto;" src="{{ folder }}/{{ photo.name }}" alt="">
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {{ form.submit(class='btn btn-danger', value='Delete photo') }}
+    </div>
+</form>
+{% endblock %}

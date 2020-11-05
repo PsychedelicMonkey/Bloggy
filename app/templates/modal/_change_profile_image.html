@@ -1,0 +1,19 @@
+{% block modal %}
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">Change profile image</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="{{ url_for('user.change_profile_image', id=photo.id) }}" method="post">
+    {{ form.hidden_tag() }}
+    <div class="modal-body">
+        <p>Are you sure you use this as your profile image?</p>
+            <img style="width: 100%; height: auto;" src="{{ folder }}/{{ photo.name }}" alt="">
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {{ form.submit(class='btn btn-primary', value='Save changes') }}
+    </div>
+</form>
+{% endblock %}

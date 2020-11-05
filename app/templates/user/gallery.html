@@ -1,18 +1,17 @@
 <div class="gallery">
     {% for photo in photos %}
-    {% set split = photo.split('app/')[1] %}
 
     <div class="photo-wrapper">
-        <img src="{{ photo.split('app')[1] }}" alt="">
+        <img src="{{ folder }}/{{ photo.name }}" alt="">
         {% if current_user == user %}
         <div class="photo-btn dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"></button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Use as profile image</a>
-                <a class="dropdown-item" href="#">Use as background image</a>
+                <button class="dropdown-item" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.change_profile_image', id=photo.id) }}">Use as profile image</button>
+                <button class="dropdown-item" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.change_profile_background', id=photo.id) }}">Use as background image</button>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Delete this image</a>
+                <button class="dropdown-item" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.delete_image', id=photo.id) }}">Delete this image</button>
             </div>
         </div>
         {% endif %}

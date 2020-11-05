@@ -32,6 +32,7 @@ class User(UserMixin, db.Model):
     background_image = db.Column(db.String(64), nullable=True)
 
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    files = db.relationship('File', backref='user', lazy='dynamic')
 
     followed = db.relationship(
         'User', secondary=followers,
@@ -90,3 +91,14 @@ class Post(db.Model):
 
     def is_liked(self, user):
         return self.likes.filter(like.c.user_id == user.id).count() > 0
+
+
+class File(db.Model):
+    __tablename__ = 'file'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    name = db.Column(db.String(120), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<File {}>'.format(self.name)

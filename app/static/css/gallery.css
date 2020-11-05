@@ -1,6 +1,6 @@
 .gallery {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
     align-items: center;
     gap: 10px;
     margin-bottom: 16px;
@@ -21,4 +21,10 @@
     top: 0;
     right: 0;
     margin: 10px;
+}
+
+@media (max-width: 768px) {
+    .photo-btn {
+        display: block;
+    }
 }
