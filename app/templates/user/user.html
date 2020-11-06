@@ -121,22 +121,14 @@
                     <div class="tab-pane fade" id="pills-followers" role="tabpanel" aria-labelledby="pills-followers-tab">
                         <div class="pane-content">
                             <h3>{{ user.first_name }}'s followers</h3>
-                            <div class="row">
-                                {% for follower in user.followers %}
-                                    {% include "user/_followers.html" %}
-                                {% endfor %}
-                            </div>
+                            <div id="followers-content" class="row"></div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-following" role="tabpanel"
                         aria-labelledby="pills-following-tab">
                         <div class="pane-content">
                             <h3>Who {{ user.first_name }} follows</h3>
-                            <div class="row">
-                                {% for follower in user.followed %}
-                                    {% include "user/_followers.html" %}
-                                {% endfor %}
-                            </div>
+                            <div id="following-content" class="row"></div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-photos" role="tabpanel" aria-labelledby="pills-photos-tab">
@@ -188,6 +180,22 @@
         {% endfor %}
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/ajax.js') }}"></script>
+<script>
+window.onload = function() {
+    $('#pills-followers-tab').click(function(event) {
+        ajaxDumpIntoElement('{{ url_for("get_followers", username=user.username) }}', $('#followers-content'));
+    });
+
+    $('#pills-following-tab').click(function(event) {
+        ajaxDumpIntoElement('{{ url_for("get_following", username=user.username) }}', $('#following-content'));
+    });
+}
+</script>
 
 {% if current_user.is_authenticated %}
 <script>

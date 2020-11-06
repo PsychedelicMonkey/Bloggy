@@ -3,7 +3,9 @@ from flask import render_template, flash, redirect, request, url_for, jsonify
 from flask_login import current_user, login_required
 from app import app, db
 from app.forms import PostForm, EmptyForm
-from app.models import Post
+from app.models import Post, User
+
+import json
 
 @app.before_request
 def update_last_seen():
@@ -126,3 +128,23 @@ def unlike(id):
     #    return redirect(request.referrer)
     #else:
     #    return redirect(url_for('index'))
+
+
+@app.route('/get_followers/<username>')
+def get_followers(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    followers = user.followers
+    if followers.count() > 0:
+        return render_template('user/_followers.html', followers=followers)
+    else:
+        return '<h5>{} has no followers</h5>'.format(user.first_name)
+
+
+@app.route('/get_following/<username>')
+def get_following(username):
+    user = User.query.filter_by(username=username).first()
+    followers = user.followed
+    if followers.count() > 0:
+        return render_template('user/_followers.html', followers=followers)
+    else:
+        return '<h5>{} is not following anyone</h5>'.format(user.first_name)

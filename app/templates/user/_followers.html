@@ -1,3 +1,4 @@
+{% for follower in followers %}
 <div class="user-image-link small">
     <a href="{{ url_for('user.user', username=follower.username) }}">
         {% if follower.avatar %}
@@ -9,3 +10,4 @@
         <h5 class="follower-name">{{ follower.get_full_name() }}</h5>
     </a>
 </div>
+{% endfor %}
