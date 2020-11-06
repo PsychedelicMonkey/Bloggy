@@ -1,11 +1,12 @@
+from datetime import datetime
 from flask import render_template, flash, request, redirect, url_for
 from flask_login import current_user, login_required
 from app import app, db
-from app.models import User, Post, File
+from app.models import User, Post, File, Message
 from app.forms import EmptyForm
 from app.uploads.forms import UploadFileForm
 from app.user import bp
-from app.user.forms import AboutMeForm
+from app.user.forms import AboutMeForm, SendMessageForm
 from app.uploads.routes import allowed_file
 
 import os
@@ -18,7 +19,7 @@ file_path = app.config['UPLOAD_FOLDER'].split('app')[1]
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.created_at.desc())
-    photos = current_user.files.order_by(File.created_at.desc()).all()
+    photos = user.files.order_by(File.created_at.desc()).all()
     #photos = glob('{}/{}*'.format(app.config['UPLOAD_FOLDER'], user.username))
     like_form = EmptyForm()
     about_me = AboutMeForm()
@@ -29,7 +30,7 @@ def user(username):
 @bp.route('/<username>/photos')
 def photos(username):
     user = User.query.filter_by(username=username).first_or_404()
-    photos = current_user.files.order_by(File.created_at.desc()).all()
+    photos = user.files.order_by(File.created_at.desc()).all()
     #photos = glob('{}/{}*'.format(app.config['UPLOAD_FOLDER'], username))
     form = UploadFileForm()
     return render_template('user/photos.html', user=user, form=form, photos=photos, folder=file_path)
@@ -149,15 +150,57 @@ def delete_image(id):
 @bp.route('/edit_bio', methods=['GET', 'POST'])
 @login_required
 def edit_bio():
-    user = User.query.filter_by(username=current_user.username).first()
     form = AboutMeForm()
     if form.validate_on_submit():
-        user.about_me = form.text.data
+        current_user.about_me = form.text.data
         db.session.commit()
         flash(u'You \'About Me\' section is updated.', 'success')
-        return redirect(url_for('user.user', username=user.username))
+        return redirect(request.referrer)
     elif request.method == 'GET':
-        form.text.data = user.about_me
+        form.text.data = current_user.about_me
         return render_template('modal/_edit_bio.html', form=form)
+    else:
+        return redirect(url_for('index'))
+
+
+@bp.route('/messages')
+@login_required
+def messages():
+    current_user.last_message_read_time = datetime.utcnow()
+    db.session.commit()
+    form = SendMessageForm()
+    messages = current_user.received_messages.order_by(Message.created_at.desc()).all()
+    return render_template('user/messages.html', form=form, messages=messages)
+
+
+@bp.route('/send_message/<username>', methods=['GET', 'POST'])
+@login_required
+def send_message(username):
+    user = User.query.filter_by(username=username).first()
+    form = SendMessageForm()
+    if form.validate_on_submit():
+        message = Message(body=form.body.data, recipient=user, sender=current_user)
+        db.session.add(message)
+        db.session.commit()
+        flash(u'Your message was sent to {}'.format(user.first_name), 'success')
+        return redirect(request.referrer)
+    elif request.method == 'GET':
+        return render_template('modal/message/message_form.html', form=form, user=user)
+    else:
+        return redirect(url_for('index'))
+
+
+@bp.route('/delete_message/<id>', methods=['GET', 'POST'])
+@login_required
+def delete_message(id):
+    message = Message.query.filter_by(id=id).first_or_404()
+    form = EmptyForm()
+    if form.validate_on_submit():
+        db.session.delete(message)
+        db.session.commit()
+        flash(u'Your message was deleted', 'success')
+        return redirect(request.referrer)
+    elif request.method == 'GET':
+        return render_template('modal/message/delete_message.html', form=form, message=message)
     else:
         return redirect(url_for('index'))

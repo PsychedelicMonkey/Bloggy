@@ -1,0 +1,19 @@
+{% block modal %}
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">Delete message</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="{{ url_for('user.delete_message', id=message.id) }}" method="post">
+    {{ form.hidden_tag() }}
+    <div class="modal-body">
+        <p>Are you sure you delete this message?</p>
+        <strong>You will not be able to recover this message.</strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        {{ form.submit(class='btn btn-danger', value='Delete message') }}
+    </div>
+</form>
+{% endblock %}

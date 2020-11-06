@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item"><a
+                    href="{{ url_for('user.user', username=current_user.username) }}">{{ current_user.get_full_name() }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Messages</li>
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+{% include "modal/modal.html" %}
+<div class="container">
+    <h1>Messages</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#formModal" data-formcontent="">Compose new message</button>
+        </div>
+    </div>
+
+    {% for message in messages %}
+    <div class="media">
+        <a class="media-link" href="{{ url_for('user.user', username=message.sender.username) }}">
+            {% if message.sender.avatar %}
+            <img src="{{ url_for('upload.static', filename=message.sender.avatar) }}" class="align-self-start mr-3 media-image" alt="...">
+            {% else %}
+            <i class="fas fa-user user-icon thumbnail-post"></i>
+            {% endif %}
+        </a>
+        <div class="media-body">
+            <h5 class="mt-0"><a href="{{ url_for('user.user', username=message.sender.username) }}">{{ message.sender.get_full_name() }}</a></h5>
+            <p><strong>{{ moment(message.created_at).format('LLL') }}</strong></p>
+            <p>{{ message.body }}</p>
+
+            <div class="media-actions">
+                <button class="btn btn-primary">Reply</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.delete_message', id=message.id) }}">Delete</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

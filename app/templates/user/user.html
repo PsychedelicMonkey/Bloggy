@@ -79,12 +79,17 @@
                         </li>
                         {% if current_user == user %}
                         <li class="nav-item" role="presentation">
-                            <button class="btn btn-light" href="#">Messages <span class="badge badge-primary">4</span></button>
+                            <a class="btn btn-light" href="{{ url_for('user.messages') }}">Messages 
+                                {% set new_messages = current_user.new_messages() %}
+                                {% if new_messages %}
+                                <span id="msg-count" class="badge badge-primary">{{ new_messages }}</span>
+                                {% endif %}
+                            </a>
                         </li>
                         {% endif %}
                         {% if not current_user == user %}
                         <li class="nav-item" role="presentation">
-                            <button class="btn btn-light" href="#">Message</button>
+                            <button class="btn btn-light" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.send_message', username=user.username) }}">Message</button>
                         </li>
                         {% endif %}
                     </ul>
