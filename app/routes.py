@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, request, url_for, jsonify
 from flask_login import current_user, login_required
 from app import app, db
 from app.forms import PostForm, EmptyForm
-from app.models import Post, User
+from app.models import Post, User, File
 
 import json
 
@@ -148,3 +148,14 @@ def get_following(username):
         return render_template('user/_followers.html', followers=followers)
     else:
         return '<h5>{} is not following anyone</h5>'.format(user.first_name)
+
+
+@app.route('/get_photos/<username>')
+def get_photos(username):
+    user = User.query.filter_by(username=username).first()
+    photos = user.files.order_by(File.created_at.desc()).all()
+    file_path = app.config['UPLOAD_FOLDER'].split('app')[1]
+    if photos:
+        return render_template('user/gallery.html', user=user, photos=photos, folder=file_path)
+    else:
+        return '<h5>{} has no photos</h5>'.format(user.first_name)

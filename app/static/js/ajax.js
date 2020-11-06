@@ -8,3 +8,17 @@ function ajaxDumpIntoElement(url, element) {
     http.open('GET', url, true);
     http.send();
 }
+
+function loadGallery(url, element) {
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            $(element).html(this.responseText);
+
+            let photos = document.querySelectorAll('.photo-wrapper');
+            photoActions(photos);
+        }
+    }
+    http.open('GET', url, true);
+    http.send();
+}
