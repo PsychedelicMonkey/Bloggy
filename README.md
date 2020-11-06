@@ -1,4 +1,5 @@
 # Bloggy
+Simple Blog application written in Python-Flask and Bootstrap.
 
 # Installation
 
