@@ -1,0 +1,17 @@
+.vscode/
+.gitignore
+
+.dockerignore
+
+Dockerfile
+docker-compose.yml
+
+add_users.py
+
+first_names.json
+last_names.json
+
+LICENSE
+README.md
+
+app.db
