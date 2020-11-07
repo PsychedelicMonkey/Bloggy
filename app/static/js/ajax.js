@@ -16,6 +16,7 @@ function loadGallery(url, element) {
             $(element).html(this.responseText);
 
             let photos = document.querySelectorAll('.photo-wrapper');
+            viewPhoto(photos);
             photoActions(photos);
         }
     }

@@ -16,7 +16,7 @@
             <p><strong>You are currently using this as your background</strong></p>
         {% endif %}
 
-        <img style="width: 100%; height: auto;" src="{{ folder }}/{{ photo.name }}" alt="">
+        <img style="width: 100%; height: auto;" src="{{ url_for('upload.static', filename=photo.name) }}" alt="">
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

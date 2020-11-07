@@ -118,12 +118,17 @@
                             {% if user == current_user %}<button class="btn btn-secondary" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.edit_bio') }}">Edit</button>{% endif %}
                         </div>
                     </div>
+
+                    <!-- followers tab -->
                     <div class="tab-pane fade" id="pills-followers" role="tabpanel" aria-labelledby="pills-followers-tab">
                         <div class="pane-content">
                             <h3>{{ user.first_name }}'s followers</h3>
                             <div id="followers-content" class="row"></div>
                         </div>
                     </div>
+                    <!-- end followers -->
+
+                    <!-- following tab -->
                     <div class="tab-pane fade" id="pills-following" role="tabpanel"
                         aria-labelledby="pills-following-tab">
                         <div class="pane-content">
@@ -131,6 +136,9 @@
                             <div id="following-content" class="row"></div>
                         </div>
                     </div>
+                    <!-- end following -->
+
+                    <!-- photos tab -->
                     <div class="tab-pane fade" id="pills-photos" role="tabpanel" aria-labelledby="pills-photos-tab">
                         <div class="pane-content">
                             <h3>Photos</h3>
@@ -140,6 +148,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- end photos -->
                 </div>
             </div>
             <div class="col-lg-3">
@@ -169,16 +178,18 @@
             </div>
             <!-- end -->
         </div>
+
+        <h2>{{ user.first_name }}'s posts</h2>
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-12">
+                {% include "_post.html" %}
+            </div>
+            {% endfor %}
+        </div>
+
     </section>
 
-    <h2>{{ user.first_name }}'s posts</h2>
-    <div class="row">
-        {% for post in posts %}
-        <div class="col-md-12">
-            {% include "_post.html" %}
-        </div>
-        {% endfor %}
-    </div>
 </div>
 
 {% endblock %}
@@ -217,7 +228,5 @@ window.onload = function() {
 <script src="{{ url_for('static', filename='js/posts.js') }}"></script>
 {% endif %}
 
-{% if current_user == user %}
 <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
-{% endif %}
 {% endblock %}

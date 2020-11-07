@@ -2,14 +2,14 @@
     {% for photo in photos %}
 
     <div class="photo-wrapper">
-        <img src="{{ folder }}/{{ photo.name }}" alt="">
+        <img src="{{ url_for('upload.static', filename=photo.name) }}" alt="">
         {% if current_user == user %}
         <div class="photo-btn dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"></button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button class="dropdown-item" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.change_profile_image', id=photo.id) }}">Use as profile image</button>
-                <button class="dropdown-item" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.change_profile_background', id=photo.id) }}">Use as background image</button>
+                <button class="dropdown-item {% if current_user.avatar == photo.name %}disabled{% endif %}" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.change_profile_image', id=photo.id) }}">Use as profile image</button>
+                <button class="dropdown-item {% if current_user.background_image == photo.name %}disabled{% endif %}" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.change_profile_background', id=photo.id) }}">Use as background image</button>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.delete_image', id=photo.id) }}">Delete this image</button>
             </div>

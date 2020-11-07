@@ -42,13 +42,13 @@
 {% endblock %}
 
 {% block scripts %}
-{% if user == current_user %}
 <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
 <script>
     window.onload = function() {
         let photos = document.querySelectorAll('.photo-wrapper');
-        photoActions(photos);
+        viewPhoto(photos);
+        
+        {% if user == current_user %}photoActions(photos);{% endif %}
     }
 </script>
-{% endif %}
 {% endblock %}

@@ -13,7 +13,7 @@ import os
 from glob import glob
 from werkzeug.utils import secure_filename
 
-file_path = app.config['UPLOAD_FOLDER'].split('app')[1]
+file_path = app.config['UPLOAD_FOLDER']
 
 @bp.route('/<username>')
 def user(username):

@@ -9,7 +9,7 @@
     {{ form.hidden_tag() }}
     <div class="modal-body">
         <p>Are you sure you use this as your profile image?</p>
-            <img style="width: 100%; height: auto;" src="{{ folder }}/{{ photo.name }}" alt="">
+            <img style="width: 100%; height: auto;" src="{{ url_for('upload.static', filename=photo.name) }}" alt="">
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

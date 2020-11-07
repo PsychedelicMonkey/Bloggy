@@ -154,7 +154,7 @@ def get_following(username):
 def get_photos(username):
     user = User.query.filter_by(username=username).first()
     photos = user.files.order_by(File.created_at.desc()).all()
-    file_path = app.config['UPLOAD_FOLDER'].split('app')[1]
+    file_path = app.config['UPLOAD_FOLDER']
     if photos:
         return render_template('user/gallery.html', user=user, photos=photos, folder=file_path)
     else:
