@@ -26,3 +26,14 @@ function changeButton(button, action, id, count) {
     }
     button.innerHTML = count + ' likes';
 }
+
+function setAction(likeButtons) {
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            action = button.dataset.action;
+            target = button.dataset.target;
+
+            updatePostLikes(button, action, target);
+        });
+    });
+}

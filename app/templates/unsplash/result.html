@@ -1,0 +1,20 @@
+{% block result %}
+<div class="gallery">
+    {% for photo in photos %}
+    <div class="photo-wrapper">
+        <img style="width: 100%;" src="{{ photo['urls']['small'] }}" alt="">
+        <p>Photo by: <a target="_blank" href="{{ photo['user']['links']['html'] }}">{{ photo['user']['username'] }}</a> on <a target="_blank" href="https://unsplash.com/">Unsplash</a></p>
+        <button class="btn-download btn btn-primary">Download</button>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    var photos = document.querySelectorAll('.photo-wrapper');
+
+    photos.forEach(photo => {
+        photo.childNodes[5].addEventListener('click', function() {
+            console.log(photo.childNodes[1].src);
+        });
+    });
+</script>
+{% endblock %}

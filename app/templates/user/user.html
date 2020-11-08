@@ -195,37 +195,29 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/ajax.js') }}"></script>
 <script>
-window.onload = function() {
-    $('#pills-followers-tab').click(function(event) {
-        ajaxDumpIntoElement('{{ url_for("get_followers", username=user.username) }}', $('#followers-content'));
-    });
+    $(document).ready(function() {
+        $('#pills-followers-tab').click(function() {
+            $('#followers-content').load('{{ url_for("get_followers", username=user.username) }}');
+        });
 
-    $('#pills-following-tab').click(function(event) {
-        ajaxDumpIntoElement('{{ url_for("get_following", username=user.username) }}', $('#following-content'));
-    });
+        $('#pills-following-tab').click(function() {
+            $('#following-content').load('{{ url_for("get_following", username=user.username) }}');
+        });
 
-    $('#pills-photos-tab').click(function(event) {
-        loadGallery('{{ url_for("get_photos", username=user.username) }}', $('#photos-content'));
+        $('#pills-photos-tab').click(function() {
+            loadGallery('{{ url_for("get_photos", username=user.username) }}', $('#photos-content'));
+        });
     });
-}
 </script>
 
 {% if current_user.is_authenticated %}
+<script src="{{ url_for('static', filename='js/posts.js') }}"></script>
 <script>
     let likeButtons = document.querySelectorAll('.like-post');
 
-    for (let i = 0; i < likeButtons.length; i++) {
-        likeButtons[i].addEventListener('click', function() {
-            action = likeButtons[i].dataset.action;
-            target = likeButtons[i].dataset.target;
-
-            updatePostLikes(likeButtons[i], action, target);
-        });
-    }
+    setAction(likeButtons);
 </script>
-<script src="{{ url_for('static', filename='js/posts.js') }}"></script>
 {% endif %}
 
 <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>

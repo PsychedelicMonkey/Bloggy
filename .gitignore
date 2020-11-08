@@ -2,6 +2,7 @@ images/
 user_uploads/
 .vscode
 app.db
+results.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

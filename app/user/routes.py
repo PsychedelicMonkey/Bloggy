@@ -33,7 +33,8 @@ def photos(username):
     photos = user.files.order_by(File.created_at.desc()).all()
     #photos = glob('{}/{}*'.format(app.config['UPLOAD_FOLDER'], username))
     form = UploadFileForm()
-    return render_template('user/photos.html', user=user, form=form, photos=photos, folder=file_path)
+    searchForm = EmptyForm()
+    return render_template('user/photos.html', user=user, form=form, searchForm=searchForm, photos=photos, folder=file_path)
 
 
 @bp.route('/follow/<username>', methods=['POST'])

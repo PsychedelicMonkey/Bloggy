@@ -20,7 +20,7 @@
             
             <!-- LIKES -->
             {% if current_user.is_anonymous or post.author == current_user %}
-                <a href="#" class="btn btn-success {{ disabled }}">Like ({{ post.likes.count() }})</a>
+                <a href="#" class="btn btn-success {{ disabled }}">{{ post.likes.count() }} likes</a>
             {% else %}
                 {% if not post.is_liked(current_user) %}
                 <!--form style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
