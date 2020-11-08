@@ -1,5 +1,5 @@
 # Bloggy
-Simple Blog application written in Python-Flask and Bootstrap.
+Simple Blog application written in Python-Flask and Bootstrap 4.
 
 # Installation
 
@@ -11,7 +11,7 @@ Environment variables can be stored in a '.env' file on the project root. Custom
 | :-------------: | :---------- |
 |  **SECRET_KEY** | The key needed for CSRF. Use of a randomly generated string is recommended in a production environment. |
 | **DATABASE_URL** | The database connection string for SQLAlchemy. By default uses SQLite and creates an 'app.db' file on the project root if this variable is unset. Use of a dedicated SQL server is recommended for a production deployment. |
-| **IMAGE_DIR** | Directory to store user-uploaded images. If the Docker container is to be used, a volume must be mapped to the container's '/img' directory to retain images uploaded by users. Defaults to the 'static/img' directory from the main app directory. |
+| **IMAGE_UPLOADS** | Directory to store user-uploaded images. If the Docker container is to be used, a volume must be mapped to the container's '/img' directory to retain images uploaded by users. Defaults to the 'static/img' directory from the main app directory. |
   
 ### Unsplash API Integration
 This app uses the Unsplash API to give users an convenient way to include photos into blog posts.
