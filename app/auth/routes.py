@@ -9,6 +9,7 @@ from app.unsplash.routes import get_random
 
 from werkzeug.urls import url_parse
 
+#TODO: Fix unsplash random image on login form
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -25,14 +26,15 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
 
-    photo = get_random()
-    if photo:
-        url = photo['urls']['regular']
-        author = photo['user']['username']
-        auth_link = photo['user']['links']['html']
-        return render_template('auth/login.html', title="Login", form=form, url=url, author=author, auth_link=auth_link)
-    else:
-        return render_template('auth/login.html', title="Login", form=form)
+    return render_template('auth/login.html', title='Login', form=form)
+    #photo = get_random()
+    #if photo:
+    #    url = photo['urls']['regular']
+    #    author = photo['user']['username']
+    #    auth_link = photo['user']['links']['html']
+    #    return render_template('auth/login.html', title="Login", form=form, url=url, author=author, auth_link=auth_link)
+    #else:
+    #    return render_template('auth/login.html', title="Login", form=form)
 
 
 @auth.route('/logout')
@@ -43,6 +45,7 @@ def logout():
     return redirect(url_for('index'))
 
 
+#TODO: Fix unsplash random image on register form
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -62,12 +65,12 @@ def register():
         db.session.commit()
         flash(u'You have registered!', 'success')
         return redirect(url_for('auth.login'))
-
-    photo = get_random()
-    if photo:
-        url = photo['urls']['regular']
-        author = photo['user']['username']
-        auth_link = photo['user']['links']['html']
-        return render_template('auth/register.html', title="Register", form=form, url=url, author=author, auth_link=auth_link)
-    else:
-        return render_template('auth/register.html', title="Register", form=form)
+    return render_template('auth/register.html', title='Register', form=form)
+    #photo = get_random()
+    #if photo:
+    #    url = photo['urls']['regular']
+    #    author = photo['user']['username']
+    #    auth_link = photo['user']['links']['html']
+    #    return render_template('auth/register.html', title="Register", form=form, url=url, author=author, auth_link=auth_link)
+    #else:
+    #    return render_template('auth/register.html', title="Register", form=form)

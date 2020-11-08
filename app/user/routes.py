@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import render_template, flash, request, redirect, url_for
 from flask_login import current_user, login_required
 from app import app, db
+from app.forms import PostForm
 from app.models import User, Post, File, Message
 from app.forms import EmptyForm
 from app.uploads.forms import UploadFileForm
@@ -101,7 +102,7 @@ def change_profile_image(id):
         flash(u'You changed your profile image', 'success')
         return redirect(request.referrer)
     elif request.method == 'GET':
-        return render_template('modal/_change_profile_image.html', photo=photo, form=form, folder=file_path)
+        return render_template('modal/user/image/_change_profile_image.html', photo=photo, form=form, folder=file_path)
     else:
         return redirect(url_for('index'))
 
@@ -117,7 +118,7 @@ def change_profile_background(id):
         flash(u'You changed your background image', 'success')
         return redirect(request.referrer)
     elif request.method == 'GET':
-        return render_template('modal/_change_profile_background.html', photo=photo, form=form, folder=file_path)
+        return render_template('modal/user/image/_change_profile_background.html', photo=photo, form=form, folder=file_path)
     else:
         return redirect(url_for('index'))
 
@@ -143,7 +144,7 @@ def delete_image(id):
             flash(u'Could not delete photo', 'danger')
             return redirect(request.referrer)
     elif request.method == 'GET':
-        return render_template('modal/_delete_image.html', form=form, photo=photo, folder=file_path)
+        return render_template('modal/user/image/_delete_image.html', form=form, photo=photo, folder=file_path)
     else:
         return redirect(url_for('index'))
 
@@ -159,7 +160,7 @@ def edit_bio():
         return redirect(request.referrer)
     elif request.method == 'GET':
         form.text.data = current_user.about_me
-        return render_template('modal/_edit_bio.html', form=form)
+        return render_template('modal/user/_edit_bio.html', form=form)
     else:
         return redirect(url_for('index'))
 

@@ -159,3 +159,8 @@ def get_photos(username):
         return render_template('user/gallery.html', user=user, photos=photos, folder=file_path)
     else:
         return '<h5>{} has no photos</h5>'.format(user.first_name)
+
+
+@app.route('/new_post_modal')
+def new_post_modal():
+    return 'test'
