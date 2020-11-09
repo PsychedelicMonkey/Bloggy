@@ -108,6 +108,10 @@ class File(db.Model):
     name = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    url = db.Column(db.String(120), nullable=True)
+    file_author = db.Column(db.String(120), nullable=True)
+    file_author_url = db.Column(db.String(120), nullable=True)
+
     def __repr__(self):
         return '<File {}>'.format(self.name)
 

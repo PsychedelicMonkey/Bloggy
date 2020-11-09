@@ -4,17 +4,45 @@
     <div class="photo-wrapper">
         <img style="width: 100%;" src="{{ photo['urls']['small'] }}" alt="">
         <p>Photo by: <a target="_blank" href="{{ photo['user']['links']['html'] }}">{{ photo['user']['username'] }}</a> on <a target="_blank" href="https://unsplash.com/">Unsplash</a></p>
-        <button class="btn-download btn btn-primary">Download</button>
+
+        <form action="{{ url_for('unsplash.download', id=photo['id']) }}" method="post">
+            {{ form.csrf_token }}
+            {{ form.user(value=photo['user']['username']) }}
+            {{ form.user_url(value=photo['user']['links']['html']) }}
+            {{ form.url(value=photo['links']['download']) }}
+
+            {{ form.submit(value='Download', class='btn btn-primary') }}
+        </form>
     </div>
     {% endfor %}
 </div>
 <script>
-    var photos = document.querySelectorAll('.photo-wrapper');
-
-    photos.forEach(photo => {
-        photo.childNodes[5].addEventListener('click', function() {
-            console.log(photo.childNodes[1].src);
+    $(document).ready(function() {
+        var photos = document.querySelectorAll('.photo-wrapper');
+    
+        photos.forEach(photo => {
+            var form = photo.getElementsByTagName('form');
+            
+            submit(form);
         });
     });
+
+    function submit(form) {
+        $(form).submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+            
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function(data) {
+                    alert(data); // TODO: change to toast
+                }
+            });
+        });
+    }
 </script>
 {% endblock %}

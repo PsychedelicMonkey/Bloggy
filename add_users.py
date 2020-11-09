@@ -6,9 +6,10 @@ import json
 import random
 import string
 
+basedir = os.path.dirname(os.path.abspath(__file__))
 
-people = 'app/static/images/people'
-background = 'app/static/images/background'
+people = os.path.join(basedir, 'images')
+background = os.path.join(basedir, 'images')
 
 first_names = json.loads(open('first_names.json').read())
 last_names = json.loads(open('last_names.json').read())
