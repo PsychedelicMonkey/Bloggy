@@ -12,6 +12,10 @@
             {{ form.url(value=photo['links']['download']) }}
 
             {{ form.submit(value='Download', class='btn btn-primary') }}
+            <button style="display: none;" class="btn-loading btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Downloading...
+            </button>
         </form>
     </div>
     {% endfor %}
@@ -33,11 +37,23 @@
 
             var form = $(this);
             var url = form.attr('action');
+
+            var submit = $('input[type=submit]', this);
+            var loading = form.find('.btn-loading');
             
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: form.serialize(),
+                beforeSend: function() {
+                    submit.prop('disabled', true);
+                    submit.hide();
+                    loading.show();
+                },
+                complete: function() {
+                    loading.hide();
+                    submit.show();
+                },
                 success: function(data) {
                     alert(data); // TODO: change to toast
                 }

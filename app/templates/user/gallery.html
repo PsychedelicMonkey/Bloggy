@@ -17,7 +17,7 @@
         {% endif %}
 
         {% if photo.file_author and photo.file_author_url %}
-        <p>Photo by: <a href="{{ photo.file_author_url }}" target="_blank">{{ photo.file_author }}</a> on <a href="https://unsplash.com/" target="_blank">Unsplash</a></p>
+        <p class="unsplash-links">Photo by: <a href="{{ photo.file_author_url }}" target="_blank">{{ photo.file_author }}</a> on <a href="https://unsplash.com/" target="_blank">Unsplash</a></p>
         {% endif %}
     </div>
     {% endfor %}

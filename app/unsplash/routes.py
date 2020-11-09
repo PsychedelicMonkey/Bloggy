@@ -37,7 +37,7 @@ def random():
         download = DownloadPhotoForm()
         return render_template('unsplash/result.html', photos=photos, form=download)
     else:
-        return 'Test'
+        return 'There was a problem retrieving your photos'
 
 
 @unsplash.route('/download/<id>', methods=['POST'])

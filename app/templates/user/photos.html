@@ -71,7 +71,6 @@
                 url: url,
                 data: form.serialize(),
                 success: function(data) {
-                    console.log(data);
                     $('#unsplashModal').find('.modal-body').empty()
                     $('#unsplashModal').find('.modal-body').html(data)
                     $('#unsplashModal').modal('show');
