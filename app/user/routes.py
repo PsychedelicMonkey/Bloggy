@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, flash, request, redirect, url_for
+from flask import render_template, flash, request, redirect, url_for, jsonify
 from flask_login import current_user, login_required
 from app import app, db
 from app.forms import PostForm
@@ -52,8 +52,9 @@ def follow(username):
             return redirect(url_for('user.user', username=username))
         current_user.follow(user)
         db.session.commit()
-        flash(u'You are following {}'.format(user.username), 'success')
-        return redirect(url_for('user.user', username=username))
+        #flash(u'You are following {}'.format(user.username), 'success')
+        return jsonify({"route": url_for('user.unfollow', username=username), "btnLabel": "Unfollow", "msg": "You are following {}".format(user.username), "newCount": "{} Followers".format(user.followers.count())})
+        #return redirect(url_for('user.user', username=username))
     return redirect(url_for('index'))
 
 
@@ -71,8 +72,9 @@ def unfollow(username):
             return redirect(url_for('user.user', username=username))
         current_user.unfollow(user)
         db.session.commit()
-        flash(u'You are not following {}'.format(user.username), 'success')
-        return redirect(url_for('user.user', username=username))
+        #flash(u'You are not following {}'.format(user.username), 'success')
+        return jsonify({"route": url_for('user.follow', username=username), "btnLabel": "Follow", "msg": "You are not following {}".format(user.username), "newCount": "{} Followers".format(user.followers.count())})
+        #return redirect(url_for('user.user', username=username))
     return redirect(url_for('index'))
 
 

@@ -4,7 +4,7 @@ function loadGallery(url, element) {
         if (this.readyState == 4 && this.status == 200) {
             $(element).html(this.responseText);
 
-            let photos = document.querySelectorAll('.photo-wrapper');
+            var photos = document.querySelectorAll('.photo-wrapper');
             viewPhoto(photos);
             photoActions(photos);
         }
@@ -46,6 +46,7 @@ function photoActions(photos) {
     });
 }
 
+// TODO: Fix bug to make popup action button show on refresh (or change to just add new photo)
 function refreshGallery(url) {
     $('#gallery').empty();
     $('#gallery').load(url);

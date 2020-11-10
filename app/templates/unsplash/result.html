@@ -3,11 +3,11 @@
     {% for photo in photos %}
     <div class="photo-wrapper">
         <img style="width: 100%;" src="{{ photo['urls']['small'] }}" alt="">
-        <p>Photo by: <a target="_blank" href="{{ photo['user']['links']['html'] }}">{{ photo['user']['username'] }}</a> on <a target="_blank" href="https://unsplash.com/">Unsplash</a></p>
+        <p>Photo by: <a target="_blank" href="{{ photo['user']['links']['html'] }}">{{ photo['user']['name'] }}</a> on <a target="_blank" href="https://unsplash.com/">Unsplash</a></p>
 
         <form action="{{ url_for('unsplash.download', id=photo['id']) }}" method="post">
             {{ form.csrf_token }}
-            {{ form.user(value=photo['user']['username']) }}
+            {{ form.user(value=photo['user']['name']) }}
             {{ form.user_url(value=photo['user']['links']['html']) }}
             {{ form.url(value=photo['links']['download']) }}
 

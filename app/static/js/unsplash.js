@@ -53,6 +53,8 @@ function submit(form, refreshUrl) {
             complete: function() {
                 loading.hide();
                 submit.show();
+
+                // Refresh the page
                 $('#gallery').empty();
                 $('#gallery').load(refreshUrl);
             },

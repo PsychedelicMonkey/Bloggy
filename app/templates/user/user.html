@@ -41,16 +41,16 @@
 
                 {% if not current_user == user and current_user.is_authenticated %}
                     {% if not current_user.is_following(user) %}
-                    <form id="follow-form" action="{{ url_for('user.follow', username=user.username) }}" method="post" data-form="follow">
+                    <form id="follow-form" action="{{ url_for('user.follow', username=user.username) }}" method="post" data-route="follow">
                         {{ form.hidden_tag() }}
                     
-                        {{ form.submit(value='Follow', class='btn btn-info') }}
+                        {{ form.submit(value='Follow', class='btn btn-info', id='follow-submit', disabled='disabled') }}
                     </form>
                     {% else %}
-                    <form id="unfollow-form" action="{{ url_for('user.unfollow', username=user.username) }}" method="post" data-form="unfollow">
+                    <form id="follow-form" action="{{ url_for('user.unfollow', username=user.username) }}" method="post" data-route="unfollow">
                         {{ form.hidden_tag() }}
                     
-                        {{ form.submit(value='Unfollow', class='btn btn-info') }}
+                        {{ form.submit(value='Unfollow', class='btn btn-info', id='follow-submit', disabled='disabled') }}
                     </form>
                     {% endif %}
                 {% endif %}
@@ -211,11 +211,15 @@
         $('#pills-photos-tab').click(function() {
             loadGallery('{{ url_for("get_photos", username=user.username) }}', $('#photos-content'));
         });
+        
+        followForm($('#follow-form'));
+        $(":button,:submit").removeAttr("disabled"); // Disable follow button until window is loaded
     });
 </script>
 
 {% if current_user.is_authenticated %}
 <script src="{{ url_for('static', filename='js/posts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user.js') }}"></script>
 <script>
     let likeButtons = document.querySelectorAll('.like-post');
 
