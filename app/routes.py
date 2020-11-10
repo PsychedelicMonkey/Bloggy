@@ -73,61 +73,36 @@ def delete_post(id):
         return redirect(url_for('index'))
 
 
-#TODO: Change to include CRSF
+#TODO: Toast
 @app.route('/like/<id>', methods=['POST'])
 @login_required
 def like(id):
     post = Post.query.filter_by(id=id).first_or_404()
-    if post.author == current_user:
-        return jsonify({'message_category': 'danger', 'message': 'You cannot like your own posts'})
-    if post.is_liked(current_user):
-        return jsonify({'message_category': 'danger', 'message': 'You already like this post'})
-    post.likes.append(current_user)
-    db.session.commit()
-    return jsonify({'id': post.id, 'likes': post.likes.count(), 'message_category': 'success', 'message': 'You liked {}\'s post'.format(post.author.first_name)})
-    #post = Post.query.filter_by(id=id).first_or_404()
-    #form = EmptyForm()
-    #if form.validate_on_submit():
-    #    if post.author == current_user:
-    #        flash(u'You cannot like your own posts', 'danger')
-    #        return redirect(url_for('index'))
-    #    if post.is_liked(current_user):
-    #        flash(u'You already like this post', 'danger')
-    #        return redirect(url_for('index'))
-    #    post.likes.append(current_user)
-    #    db.session.commit()
-    #    flash(u'You liked {}\'s post'.format(post.author.display_name), 'success')
-    #    return redirect(request.referrer)
-    #else:
-    #    return redirect(url_for('index'))
+    form = EmptyForm()
+    if form.validate_on_submit():
+        if post.author == current_user:
+            return jsonify({'message_category': 'danger', 'message': 'You cannot like your own posts'})
+        if post.is_liked(current_user):
+            return jsonify({'message_category': 'danger', 'message': 'You already like this post'})
+        post.likes.append(current_user)
+        db.session.commit()
+        return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You liked {}\'s post'.format(post.author.first_name), 'action': url_for('unlike', id=id), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-danger'})
 
 
-#TODO: Change to include CRSF
+#TODO: Toast
 @app.route('/unlike/<id>', methods=['POST'])
 @login_required
 def unlike(id):
     post = Post.query.filter_by(id=id).first_or_404()
-    if post.author == current_user:
-        return jsonify({'message_category': 'danger', 'message': 'You cannot unlike your own posts'})
-    if not post.is_liked(current_user):
-        return jsonify({'message_category': 'danger', 'message': 'You already unlike this post'})
-    post.likes.remove(current_user)
-    db.session.commit()
-    return jsonify({'id': post.id, 'likes': post.likes.count(), 'message_category': 'success', 'message': 'You unliked {}\'s post'.format(post.author.first_name)})
-    #form = EmptyForm()
-    #if form.validate_on_submit():
-    #    if post.author == current_user:
-    #        flash(u'You cannot unlike your own posts', 'danger')
-    #        return redirect(url_for('index'))
-    #    if not post.is_liked(current_user):
-    #        flash(u'You already unlike this post', 'danger')
-    #        return redirect(url_for('index'))
-    #    post.likes.remove(current_user)
-    #    db.session.commit()
-    #    flash(u'You unliked {}\'s post'.format(post.author.display_name), 'success')
-    #    return redirect(request.referrer)
-    #else:
-    #    return redirect(url_for('index'))
+    form = EmptyForm()
+    if form.validate_on_submit():
+        if post.author == current_user:
+            return jsonify({'message_category': 'danger', 'message': 'You cannot unlike your own posts'})
+        if not post.is_liked(current_user):
+            return jsonify({'message_category': 'danger', 'message': 'You already unlike this post'})
+        post.likes.remove(current_user)
+        db.session.commit()
+        return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You unliked {}\'s post'.format(post.author.first_name), 'action': url_for('like', id=id), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-success'})
 
 
 @app.route('/get_followers/<username>')

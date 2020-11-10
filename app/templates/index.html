@@ -57,10 +57,12 @@
 {% if current_user.is_authenticated %}
 <script src="{{ url_for('static', filename='js/posts.js') }}"></script>
 <script>
-    let likeButtons = document.querySelectorAll('.like-post');
+    let forms = document.querySelectorAll('.like-form');
+    forms.forEach(form => {
+        submitLike(form);
+    })
 
-    setAction(likeButtons);
+    
 </script>
-<script src="{{ url_for('static', filename='js/posts.js') }}"></script>
 {% endif %}
 {% endblock %}

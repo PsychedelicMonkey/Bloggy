@@ -23,17 +23,15 @@
                 <a href="#" class="btn btn-success {{ disabled }}">{{ post.likes.count() }} likes</a>
             {% else %}
                 {% if not post.is_liked(current_user) %}
-                <!--form style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
+                <form class="like-form" style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
                     {{ like_form.hidden_tag() }}
-                    {{ like_form.submit(class='btn btn-success', value='Like ({})'.format(post.likes.count())) }}
-                </form-->
-                <button class="like-post btn btn-success" data-action="like" data-target="{{ url_for('like', id=post.id) }}">{{ post.likes.count() }} likes</button>
+                    {{ like_form.submit(class='like-submit btn btn-success', value='{} Likes'.format(post.likes.count())) }}
+                </form>
                 {% else %}
-                <!--form style="display: inline-block;" action="{{ url_for('unlike', id=post.id) }}" method="post">
+                <form class="like-form" style="display: inline-block;" action="{{ url_for('unlike', id=post.id) }}" method="post">
                     {{ like_form.hidden_tag() }}
-                    {{ like_form.submit(class='btn btn-danger', value='Unlike ({})'.format(post.likes.count())) }}
-                </form-->
-                <button class="like-post btn btn-danger" data-action="unlike" data-target="{{ url_for('unlike', id=post.id) }}">{{ post.likes.count() }} likes</button>
+                    {{ like_form.submit(class='like-submit btn btn-danger', value='{} Likes'.format(post.likes.count())) }}
+                </form>
                 {% endif %}
             {% endif %}
             <!-- END LIKES -->

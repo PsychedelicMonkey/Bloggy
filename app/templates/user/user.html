@@ -221,9 +221,10 @@
 <script src="{{ url_for('static', filename='js/posts.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user.js') }}"></script>
 <script>
-    let likeButtons = document.querySelectorAll('.like-post');
-
-    setAction(likeButtons);
+    let likeForms = document.querySelectorAll('.like-form');
+    likeForms.forEach(form => {
+        submitLike(form);
+    });
 </script>
 {% endif %}
 
