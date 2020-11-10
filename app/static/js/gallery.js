@@ -32,16 +32,21 @@ function viewPhoto(photos) {
 
 function photoActions(photos) {
     photos.forEach(photo => {
-        photo.addEventListener('mouseover', function () {
+        photo.addEventListener('mouseover', function() {
             if (photo.childNodes[3] != null && photo.childNodes[3].classList[0] == 'photo-btn') {
                 photo.childNodes[3].style.display = 'block';
             }
         });
 
-        photo.addEventListener('mouseout', function () {
+        photo.addEventListener('mouseout', function() {
             if (photo.childNodes[3] != null && photo.childNodes[3].classList[0] == 'photo-btn') {
                 photo.childNodes[3].style.display = 'none';
             }
         });
     });
+}
+
+function refreshGallery(url) {
+    $('#gallery').empty();
+    $('#gallery').load(url);
 }

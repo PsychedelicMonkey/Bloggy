@@ -20,6 +20,7 @@
     </div>
     {% endfor %}
 </div>
+<script src="{{ url_for('static', filename='js/unsplash.js') }}"></script>
 <script>
     $(document).ready(function() {
         var photos = document.querySelectorAll('.photo-wrapper');
@@ -27,38 +28,8 @@
         photos.forEach(photo => {
             var form = photo.getElementsByTagName('form');
             
-            submit(form);
+            submit(form, "{{ url_for('get_photos', username=current_user.username) }}");
         });
     });
-
-    function submit(form) {
-        $(form).submit(function(e) {
-            e.preventDefault();
-
-            var form = $(this);
-            var url = form.attr('action');
-
-            var submit = $('input[type=submit]', this);
-            var loading = form.find('.btn-loading');
-            
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: form.serialize(),
-                beforeSend: function() {
-                    submit.prop('disabled', true);
-                    submit.hide();
-                    loading.show();
-                },
-                complete: function() {
-                    loading.hide();
-                    submit.show();
-                },
-                success: function(data) {
-                    alert(data); // TODO: change to toast
-                }
-            });
-        });
-    }
 </script>
 {% endblock %}

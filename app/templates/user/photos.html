@@ -47,6 +47,10 @@
                 {{ searchForm.hidden_tag() }}
 
                 {{ searchForm.submit(class='btn btn-primary', value='Search') }}
+                <button style="display: none;" class="btn-loading btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Fetching photos...
+                </button>
             </form>
         </div>
     </div>
@@ -58,30 +62,24 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+
+{% if current_user == user %}
+<script src="{{ url_for('static', filename='js/unsplash.js') }}"></script>
+{% endif %}
 <script>
     window.onload = function () {
-        $('#unsplash-form').submit(function(e) {
-            e.preventDefault();
-
-            var form = $(this);
-            var url = form.attr('action');
-
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: form.serialize(),
-                success: function(data) {
-                    $('#unsplashModal').find('.modal-body').empty()
-                    $('#unsplashModal').find('.modal-body').html(data)
-                    $('#unsplashModal').modal('show');
-                }
-            });
+        $('#btn-refresh').click(function() {
+            $(this).hide();
+            refreshGallery("{{ url_for('get_photos', username=user.username) }}");
         });
 
         let photos = document.querySelectorAll('.photo-wrapper');
         viewPhoto(photos);
-
-        {% if user == current_user %} photoActions(photos); {% endif %}
+        
+        {% if user == current_user %} 
+        photoActions(photos); 
+        loadUnsplashForm();
+        {% endif %}
     }
 </script>
 {% endblock %}
