@@ -20,6 +20,8 @@ def get_random():
     if response.status_code == 200:
         photo = response.json()
         return photo
+    else:
+        app.logger.error('Could not connect to the Unsplash API')
 
 
 @unsplash.route('/random', methods=['GET', 'POST'])
@@ -54,6 +56,7 @@ def download(id):
             urllib.request.urlretrieve(photoUrl['url'], os.path.join(app.config['UPLOAD_FOLDER'], name))
             db.session.add(photo)
             db.session.commit()
+            app.logger.info('user \'{}\' downloaded a file from Unsplash. [file: {}]'.format(current_user.username, name))
             return 'Your photo is downloaded'
         else:
             return 'There was a problem downloading your photo'
