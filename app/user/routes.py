@@ -140,6 +140,7 @@ def delete_image(id):
             os.remove(path)
             db.session.delete(photo)
             db.session.commit()
+            app.logger.info('user \'{}\' deleted a photo [name: {}]'.format(current_user.username, path))
             flash(u'Your photo was deleted', 'success')
             return redirect(request.referrer)
         else:
