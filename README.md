@@ -3,6 +3,7 @@ Simple Blog application written in Python-Flask and Bootstrap 4.
 
 # Installation
 
+## Production
 ### Environment Varables
 Environment variables can be stored in a '.env' file on the project root. Custom values are recommended for the following env variables:
 
@@ -22,3 +23,30 @@ An access key and a secret key is required from Unsplash to use their API with t
 
 - **UNSPLASH_ACCESS_KEY**
 - **UNSPLASH_SECRET_KEY**
+
+## Debug
+1. Create a python virtual environment:
+```
+python -m venv venv
+```
+
+2. Install the required packages from the requirements.txt file:
+```
+pip install -r requirements.txt
+```
+
+3. Create a .env file in the document root and set the following environment variables:
+```
+FLASK_APP=bloggy.py
+FLASK_DEBUG=1
+MAIL_SERVER=localhost
+MAIL_PORT=8025
+
+UNSPLASH_ACCESS_KEY={insert-your-unsplash-access-key-here}
+UNSPLASH_SECRET_KEY={insert-your-unsplash-secret-key-here}
+```
+
+4. For debugging issues with the email server run:
+```
+python -m smtpd -c DebuggingServer -n localhost:8025
+```
