@@ -1,5 +1,5 @@
 // Execute the follow / unfollow function when submitted
-function followForm(form) {
+function followForm(form, button) {
     $(form).submit(function(e) {
         e.preventDefault();
 
@@ -14,7 +14,7 @@ function followForm(form) {
                 var changes = JSON.parse(JSON.stringify(response));
                 console.log(changes);
                 form.attr('action', changes['route']);
-                $('#follow-submit').val(changes['btnLabel']);
+                $(button).val(changes['btnLabel']);
                 $('#pills-followers-tab').text(changes['newCount']);
             },
             error: function(response) {

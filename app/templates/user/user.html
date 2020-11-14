@@ -117,14 +117,18 @@
                             {% endif %}
                             {% if user == current_user %}<button class="btn btn-secondary" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('user.edit_bio') }}">Edit</button>{% endif %}
                         </div>
+                        <hr>
                     </div>
 
                     <!-- followers tab -->
                     <div class="tab-pane fade" id="pills-followers" role="tabpanel" aria-labelledby="pills-followers-tab">
                         <div class="pane-content">
                             <h3>{{ user.first_name }}'s followers</h3>
+                            <button data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('get_all_followers', username=user.username) }}" class="btn btn-secondary">View all</button>
+                            <br><br>
                             <div id="followers-content" class="row"></div>
                         </div>
+                        <hr>
                     </div>
                     <!-- end followers -->
 
@@ -133,8 +137,11 @@
                         aria-labelledby="pills-following-tab">
                         <div class="pane-content">
                             <h3>Who {{ user.first_name }} follows</h3>
+                            <button data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('get_all_following', username=user.username) }}" class="btn btn-secondary">View all</button>
+                            <br><br>
                             <div id="following-content" class="row"></div>
                         </div>
+                        <hr>
                     </div>
                     <!-- end following -->
 
@@ -147,6 +154,7 @@
                                 <div id="photos-content"></div>
                             </div>
                         </div>
+                        <hr>
                     </div>
                     <!-- end photos -->
                 </div>
@@ -221,7 +229,7 @@
             loadGallery('{{ url_for("get_photos", username=user.username) }}', $('#photos-content'));
         });
         
-        followForm($('#follow-form'));
+        followForm($('#follow-form'), $('#follow-submit'));
         $(":button,:submit").removeAttr("disabled"); // Disable follow button until window is loaded
     });
 </script>

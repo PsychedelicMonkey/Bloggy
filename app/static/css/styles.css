@@ -1,3 +1,7 @@
+.content {
+    padding-top: 72px;
+}
+
 .media-image, .profile-image {
     width: 84px;
     height: 84px;

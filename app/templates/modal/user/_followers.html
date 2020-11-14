@@ -1,0 +1,52 @@
+{% block modal %}
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">{{ user.first_name }}'s {{ title }}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+    <div class="modal-body">
+        {% for follower in followers %}
+        <div class="media">
+            {% if follower.avatar %}
+            <a href="{{ url_for('user.user', username=follower.username) }}"><img src="{{ url_for('upload.static', filename=follower.avatar) }}" class="align-self-start mr-3 media-image" alt="..."></a>
+            {% else %}
+            <i class="fas fa-user user-icon profile"></i>
+            {% endif %}
+            <div class="media-body">
+              <a href=""><h5 class="mt-0">{{ follower.get_full_name() }}</h5>
+              <p>@{{ follower.display_name }}</p></a>
+              <p>{{ follower.followers.count() }} Followers, {{ follower.followed.count() }} Following</p>
+              {% if follower.about_me %}
+              <p>{{ follower.about_me }}</p>
+              {% endif %}
+            </div>
+            {% if not current_user == follower and current_user.is_authenticated %}
+                {% if not current_user.is_following(follower) %}
+                <form class="follow-form" action="{{ url_for('user.follow', username=follower.username) }}" method="post" data-route="follow">
+                    {{ form.hidden_tag() }}
+                
+                    {{ form.submit(value='Follow', class='btn btn-info') }}
+                </form>
+                {% else %}
+                <form class="follow-form" action="{{ url_for('user.unfollow', username=follower.username) }}" method="post" data-route="unfollow">
+                    {{ form.hidden_tag() }}
+                
+                    {{ form.submit(value='Unfollow', class='btn btn-info') }}
+                </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+<script>
+    var forms = document.querySelectorAll('.follow-form');
+    forms.forEach(form => {
+        console.log(form.childNodes[3]);
+        followForm(form, form.childNodes[3]);
+    });
+</script>
+{% endblock %}

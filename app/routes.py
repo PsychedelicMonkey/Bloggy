@@ -35,8 +35,8 @@ def index():
 def latest():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.created_at.desc()).paginate(page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('index', page=posts.next_num) if posts.has_next else None
-    prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
+    next_url = url_for('latest', page=posts.next_num) if posts.has_next else None
+    prev_url = url_for('latest', page=posts.prev_num) if posts.has_prev else None
     if current_user.is_authenticated:
         form = PostForm()
         like_form = EmptyForm()
@@ -149,10 +149,32 @@ def unshare_post(id):
         return redirect(url_for('index'))
 
 
+@app.route('/get_all_followers/<username>')
+def get_all_followers(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    form = EmptyForm()
+    followers = user.followers.all()
+    if user.followers.count() > 0:
+        return render_template('modal/user/_followers.html', followers=followers, user=user, form=form, title='Followers')
+    else:
+        return 'No followers'
+
+
+@app.route('/get_all_following/<username>')
+def get_all_following(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    form = EmptyForm()
+    followers = user.followed.all()
+    if user.followers.count() > 0:
+        return render_template('modal/user/_followers.html', followers=followers, user=user, form=form, title='Follows')
+    else:
+        return 'No followers'
+
+
 @app.route('/get_followers/<username>')
 def get_followers(username):
     user = User.query.filter_by(username=username).first_or_404()
-    followers = user.followers
+    followers = user.followers.limit(14)
     if followers.count() > 0:
         return render_template('user/_followers.html', followers=followers)
     else:
@@ -162,7 +184,7 @@ def get_followers(username):
 @app.route('/get_following/<username>')
 def get_following(username):
     user = User.query.filter_by(username=username).first()
-    followers = user.followed
+    followers = user.followed.limit(14)
     if followers.count() > 0:
         return render_template('user/_followers.html', followers=followers)
     else:
@@ -172,7 +194,7 @@ def get_following(username):
 @app.route('/get_photos/<username>')
 def get_photos(username):
     user = User.query.filter_by(username=username).first()
-    photos = user.files.order_by(File.created_at.desc()).all()
+    photos = user.files.order_by(File.created_at.desc()).limit(6)
     file_path = app.config['UPLOAD_FOLDER']
     if photos:
         return render_template('user/gallery.html', user=user, photos=photos, folder=file_path)
