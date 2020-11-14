@@ -59,10 +59,10 @@ def upload_post():
         return redirect(url_for('index'))
 
 
-@app.route('/delete_post/<id>', methods=['GET', 'POST'])
+@app.route('/delete_post/<uuid>', methods=['GET', 'POST'])
 @login_required
-def delete_post(id):
-    post = Post.query.filter_by(id=id).first()
+def delete_post(uuid):
+    post = Post.query.filter_by(uuid=uuid).first()
     form = EmptyForm()
     if form.validate_on_submit():
         db.session.delete(post)
@@ -76,10 +76,10 @@ def delete_post(id):
 
 
 #TODO: Toast
-@app.route('/like/<id>', methods=['POST'])
+@app.route('/like/<uuid>', methods=['POST'])
 @login_required
-def like(id):
-    post = Post.query.filter_by(id=id).first_or_404()
+def like(uuid):
+    post = Post.query.filter_by(uuid=uuid).first_or_404()
     form = EmptyForm()
     if form.validate_on_submit():
         if post.author == current_user:
@@ -88,14 +88,14 @@ def like(id):
             return jsonify({'message_category': 'danger', 'message': 'You already like this post'})
         post.likes.append(current_user)
         db.session.commit()
-        return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You liked {}\'s post'.format(post.author.first_name), 'action': url_for('unlike', id=id), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-danger'})
+        return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You liked {}\'s post'.format(post.author.first_name), 'action': url_for('unlike', uuid=uuid), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-danger'})
 
 
 #TODO: Toast
-@app.route('/unlike/<id>', methods=['POST'])
+@app.route('/unlike/<uuid>', methods=['POST'])
 @login_required
-def unlike(id):
-    post = Post.query.filter_by(id=id).first_or_404()
+def unlike(uuid):
+    post = Post.query.filter_by(uuid=uuid).first_or_404()
     form = EmptyForm()
     if form.validate_on_submit():
         if post.author == current_user:
@@ -104,14 +104,14 @@ def unlike(id):
             return jsonify({'message_category': 'danger', 'message': 'You already unlike this post'})
         post.likes.remove(current_user)
         db.session.commit()
-        return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You unliked {}\'s post'.format(post.author.first_name), 'action': url_for('like', id=id), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-success'})
+        return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You unliked {}\'s post'.format(post.author.first_name), 'action': url_for('like', uuid=uuid), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-success'})
 
 
 #TODO: Toast and AJAX
-@app.route('/share_post/<id>', methods=['POST'])
+@app.route('/share_post/<uuid>', methods=['POST'])
 @login_required
-def share_post(id):
-    post = Post.query.filter_by(id=id).first_or_404()
+def share_post(uuid):
+    post = Post.query.filter_by(uuid=uuid).first_or_404()
     form = EmptyForm()
     if form.validate_on_submit():
         if post.author == current_user:
@@ -129,10 +129,10 @@ def share_post(id):
 
 
 #TODO: Toast and AJAX
-@app.route('/unshare_post/<id>', methods=['POST'])
+@app.route('/unshare_post/<uuid>', methods=['POST'])
 @login_required
-def unshare_post(id):
-    post = Post.query.filter_by(id=id).first_or_404()
+def unshare_post(uuid):
+    post = Post.query.filter_by(uuid=uuid).first_or_404()
     form = EmptyForm()
     if form.validate_on_submit():
         if post.author == current_user:
@@ -165,7 +165,7 @@ def get_all_following(username):
     user = User.query.filter_by(username=username).first_or_404()
     form = EmptyForm()
     followers = user.followed.all()
-    if user.followers.count() > 0:
+    if user.followed.count() > 0:
         return render_template('modal/user/_followers.html', followers=followers, user=user, form=form, title='Follows')
     else:
         return 'No followers'

@@ -3,6 +3,8 @@ from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 
+import uuid
+
 like = db.Table('like',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
@@ -20,9 +22,13 @@ followers = db.Table('followers',
     db.Column('timestamp', db.DateTime, default=datetime.utcnow)
 )
 
+def generate_uuid():
+    return str(uuid.uuid4())
+
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String, index=True, unique=True, default=generate_uuid)
     username = db.Column(db.String(64), index=True, unique=True)            # used for the login manager
     display_name = db.Column(db.String(64), index=True, unique=True)        # used for displaying the username on pages
     first_name = db.Column(db.String(64), nullable=False)
@@ -106,6 +112,7 @@ def load_user(id):
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String, index=True, unique=True, default=generate_uuid)
     title = db.Column(db.String(64), nullable=False)
     body = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

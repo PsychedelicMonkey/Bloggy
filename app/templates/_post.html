@@ -24,24 +24,24 @@
                 <a href="#" class="btn btn-primary {{ disabled }}">{{ post.shares.count() }} Shares</a>
             {% else %}
                 {% if not post.is_liked(current_user) %}
-                <form class="like-form" style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
+                <form class="like-form" style="display: inline-block;" action="{{ url_for('like', uuid=post.uuid) }}" method="post">
                     {{ like_form.hidden_tag() }}
                     {{ like_form.submit(class='like-submit btn btn-success', value='{} Likes'.format(post.likes.count())) }}
                 </form>
                 {% else %}
-                <form class="like-form" style="display: inline-block;" action="{{ url_for('unlike', id=post.id) }}" method="post">
+                <form class="like-form" style="display: inline-block;" action="{{ url_for('unlike', uuid=post.uuid) }}" method="post">
                     {{ like_form.hidden_tag() }}
                     {{ like_form.submit(class='like-submit btn btn-danger', value='{} Likes'.format(post.likes.count())) }}
                 </form>
                 {% endif %}
 
                 {% if not current_user.is_sharing(post) %}
-                <form style="display: inline-block;" action="{{ url_for('share_post', id=post.id) }}" method="post">
+                <form style="display: inline-block;" action="{{ url_for('share_post', uuid=post.uuid) }}" method="post">
                     {{ share_form.csrf_token }}
                     {{ share_form.submit(class='btn btn-primary', value='{} Shares'.format(post.shares.count())) }}
                 </form>
                 {% else %}
-                <form style="display: inline-block;" action="{{ url_for('unshare_post', id=post.id) }}" method="post">
+                <form style="display: inline-block;" action="{{ url_for('unshare_post', uuid=post.uuid) }}" method="post">
                     {{ share_form.csrf_token }}
                     {{ share_form.submit(class='btn btn-primary active', value='{} Shares'.format(post.shares.count())) }}
                 </form>
@@ -51,7 +51,7 @@
 
             <!--a href="#" class="btn btn-primary {{ disabled }}">Share (0)</a-->
             {% if post.author == current_user %}
-            <button class="btn btn-danger" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('delete_post', id=post.id) }}">Delete post</button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('delete_post', uuid=post.uuid) }}">Delete post</button>
             {% endif %}
         </div>
     </div>
