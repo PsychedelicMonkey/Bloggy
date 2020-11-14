@@ -20,7 +20,8 @@
             
             <!-- LIKES -->
             {% if current_user.is_anonymous or post.author == current_user %}
-                <a href="#" class="btn btn-success {{ disabled }}">{{ post.likes.count() }} likes</a>
+                <a href="#" class="btn btn-success {{ disabled }}">{{ post.likes.count() }} Likes</a>
+                <a href="#" class="btn btn-primary {{ disabled }}">{{ post.shares.count() }} Shares</a>
             {% else %}
                 {% if not post.is_liked(current_user) %}
                 <form class="like-form" style="display: inline-block;" action="{{ url_for('like', id=post.id) }}" method="post">
@@ -33,10 +34,22 @@
                     {{ like_form.submit(class='like-submit btn btn-danger', value='{} Likes'.format(post.likes.count())) }}
                 </form>
                 {% endif %}
+
+                {% if not current_user.is_sharing(post) %}
+                <form style="display: inline-block;" action="{{ url_for('share_post', id=post.id) }}" method="post">
+                    {{ share_form.csrf_token }}
+                    {{ share_form.submit(class='btn btn-primary', value='{} Shares'.format(post.shares.count())) }}
+                </form>
+                {% else %}
+                <form style="display: inline-block;" action="{{ url_for('unshare_post', id=post.id) }}" method="post">
+                    {{ share_form.csrf_token }}
+                    {{ share_form.submit(class='btn btn-primary active', value='{} Shares'.format(post.shares.count())) }}
+                </form>
+                {% endif %}
             {% endif %}
             <!-- END LIKES -->
 
-            <a href="#" class="btn btn-primary {{ disabled }}">Share (0)</a>
+            <!--a href="#" class="btn btn-primary {{ disabled }}">Share (0)</a-->
             {% if post.author == current_user %}
             <button class="btn btn-danger" data-toggle="modal" data-target="#formModal" data-formcontent="{{ url_for('delete_post', id=post.id) }}">Delete post</button>
             {% endif %}

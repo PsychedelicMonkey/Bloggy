@@ -191,6 +191,15 @@
             {% endfor %}
         </div>
 
+        <h2>{{ user.shared_posts.count() }} Shares</h2>
+        <div class="row">
+            {% for post in shared_posts %}
+            <div class="col-md-12">
+                {% include "_post.html" %}
+            </div>
+            {% endfor %}
+        </div>
+
     </section>
 
 </div>

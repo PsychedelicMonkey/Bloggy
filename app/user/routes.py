@@ -20,12 +20,14 @@ file_path = app.config['UPLOAD_FOLDER']
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.created_at.desc())
+    shared_posts = user.shared_posts.order_by(Post.created_at.desc())
     photos = user.files.order_by(File.created_at.desc()).all()
     #photos = glob('{}/{}*'.format(app.config['UPLOAD_FOLDER'], user.username))
     like_form = EmptyForm()
+    share_form = EmptyForm()
     about_me = AboutMeForm()
     form = EmptyForm()
-    return render_template('user/user.html', user=user, posts=posts, photos=photos, folder=file_path, form=form, like_form=like_form, about_me=about_me)
+    return render_template('user/user.html', user=user, posts=posts, shared_posts=shared_posts, photos=photos, folder=file_path, form=form, like_form=like_form, share_form=share_form, about_me=about_me)
 
 
 @bp.route('/<username>/photos')

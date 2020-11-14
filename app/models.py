@@ -8,6 +8,12 @@ like = db.Table('like',
     db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
 )
 
+share = db.Table('share',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+    db.Column('created', db.DateTime, default=datetime.utcnow)
+)
+
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id')),
@@ -39,6 +45,9 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+
+    shared_posts = db.relationship('Post', secondary='share', lazy='dynamic',
+        backref=db.backref('shares', lazy='dynamic'))
 
     sent_messages = db.relationship('Message', foreign_keys='Message.sender_id', backref='sender', lazy='dynamic')
     received_messages = db.relationship('Message', foreign_keys='Message.recipient_id', backref='recipient', lazy='dynamic')
@@ -76,6 +85,17 @@ class User(UserMixin, db.Model):
     def new_messages(self):
         last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
         return Message.query.filter_by(recipient=self).filter(Message.created_at > last_read_time).count()
+
+    def share_post(self, post):
+        if not self.is_sharing(post):
+            self.shared_posts.append(post)
+
+    def unshare_post(self, post):
+        if self.is_sharing(post):
+            self.shared_posts.remove(post)
+
+    def is_sharing(self, post):
+        return self.shared_posts.filter(share.c.post_id == post.id).count() > 0
 
 
 @login.user_loader

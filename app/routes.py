@@ -26,7 +26,8 @@ def index():
     if current_user.is_authenticated:
         form = PostForm()
         like_form = EmptyForm()
-        return render_template('index.html', title="Home", form=form, posts=posts.items, like_form=like_form, next_url=next_url, prev_url=prev_url)
+        share_form = EmptyForm()
+        return render_template('index.html', title="Home", form=form, posts=posts.items, like_form=like_form, share_form=share_form, next_url=next_url, prev_url=prev_url)
     return render_template('index.html', title="Home", posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 
@@ -39,7 +40,8 @@ def latest():
     if current_user.is_authenticated:
         form = PostForm()
         like_form = EmptyForm()
-        return render_template('index.html', title="Latest", form=form, posts=posts.items, like_form=like_form, next_url=next_url, prev_url=prev_url)
+        share_form = EmptyForm()
+        return render_template('index.html', title="Latest", form=form, posts=posts.items, like_form=like_form, share_form=share_form, next_url=next_url, prev_url=prev_url)
     return render_template('index.html', title="Latest", posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 
@@ -103,6 +105,48 @@ def unlike(id):
         post.likes.remove(current_user)
         db.session.commit()
         return jsonify({'likes': post.likes.count(), 'message_category': 'success', 'message': 'You unliked {}\'s post'.format(post.author.first_name), 'action': url_for('like', id=id), 'btnLabel': '{} Likes'.format(post.likes.count()), 'btnClass': 'btn-success'})
+
+
+#TODO: Toast and AJAX
+@app.route('/share_post/<id>', methods=['POST'])
+@login_required
+def share_post(id):
+    post = Post.query.filter_by(id=id).first_or_404()
+    form = EmptyForm()
+    if form.validate_on_submit():
+        if post.author == current_user:
+            flash(u'You cannot share your own posts', 'danger')
+            return redirect(request.referrer)
+        if current_user.is_sharing(post):
+            flash(u'You are already sharing this post', 'danger')
+            return redirect(request.referrer)
+        post.shares.append(current_user)
+        db.session.commit()
+        flash(u'You are sharing {}\'s post'.format(post.author.first_name), 'success')
+        return redirect(request.referrer)
+    else:
+        return redirect(url_for('index'))
+
+
+#TODO: Toast and AJAX
+@app.route('/unshare_post/<id>', methods=['POST'])
+@login_required
+def unshare_post(id):
+    post = Post.query.filter_by(id=id).first_or_404()
+    form = EmptyForm()
+    if form.validate_on_submit():
+        if post.author == current_user:
+            flash(u'You cannot unshare your own posts', 'danger')
+            return redirect(request.referrer)
+        if not current_user.is_sharing(post):
+            flash(u'You are already not sharing this post', 'danger')
+            return redirect(request.referrer)
+        post.shares.remove(current_user)
+        db.session.commit()
+        flash(u'You are no longer sharing {}\'s posts'.format(post.author.first_name), 'success')
+        return redirect(request.referrer)
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/get_followers/<username>')
